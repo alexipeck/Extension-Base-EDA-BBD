@@ -8,7 +8,7 @@ using Landis.Library.Metadata;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Landis.Extension.BaseEDA
+namespace Landis.Extension.EDA
 {
     public static class MetadataHandler
     {

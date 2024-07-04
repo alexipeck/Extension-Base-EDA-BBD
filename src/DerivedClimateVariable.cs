@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Data;
 
-namespace Landis.Extension.BaseEDA
+namespace Landis.Extension.EDA
 {
     /// <summary>
     /// The definition of a reclass map.

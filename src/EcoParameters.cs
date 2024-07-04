@@ -3,7 +3,7 @@
 //  Authors:  Francesco Tonini, Brian R. Miranda, Chris Jones
 
 using Landis.Utilities;
-namespace Landis.Extension.BaseEDA
+namespace Landis.Extension.EDA
 {
     /// <summary>
     /// Extra Ecoregion Paramaters
@@ -15,7 +15,7 @@ namespace Landis.Extension.BaseEDA
 }
 
 
-namespace Landis.Extension.BaseEDA
+namespace Landis.Extension.EDA
 {
     public class EcoParameters
         : IEcoParameters

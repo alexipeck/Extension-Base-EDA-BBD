@@ -209,3 +209,19 @@ FakesAssemblies/
 /src/lib/*.dll
 /src/.vs
 *.sln
+tests/Core7.0-EDA2.0/Landis-climate-log.txt
+tests/Core7.0-EDA2.0/Landis-log.txt
+tests/Core8.0-EDA3.0/Climate-annual-log.csv
+tests/Core8.0-EDA3.0/Climate-future-input-log.csv
+tests/Core8.0-EDA3.0/Climate-spinup-input-log.csv
+tests/Core8.0-EDA3.0/NECN-prob-establish-log.csv
+tests/Core8.0-EDA3.0/NECN-succession-log-short.csv
+tests/Core8.0-EDA3.0/NECN-succession-log.csv
+tests/Core8.0-EDA3.0/NECN-succession-monthly-log.csv
+tests/Version2.0 test/Climate-annual-log.csv
+tests/Version2.0 test/Climate-future-input-log.csv
+tests/Version2.0 test/Climate-annual-log.csv
+tests/Version2.0 test/Climate-future-input-log.csv
+tests/Version2.0 test/Climate-spinup-input-log.csv
+tests/Core8.0-EDA3.0/Landis-climate-log.txt
+tests/Core8.0-EDA3.0/Landis-log.txt

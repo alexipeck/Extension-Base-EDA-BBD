@@ -9,7 +9,7 @@ using System.Text;
 using Landis.Library.Metadata;
 
 
-namespace Landis.Extension.BaseEDA
+namespace Landis.Extension.EDA
 {
     public class EventsLog
     {

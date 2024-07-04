@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Landis.Extension.BaseEDA
+namespace Landis.Extension.EDA
 {
  
     public class Dispersal

@@ -4,10 +4,10 @@
 
 using Landis.Core;
 using Landis.SpatialModeling;
-using Landis.Library.AgeOnlyCohorts;
+using Landis.Library.UniversalCohorts;
 using System.Collections.Generic;
 
-namespace Landis.Extension.BaseEDA
+namespace Landis.Extension.EDA
 {
     ///<summary>
     /// Site Variables for a disturbance plug-in that simulates Epidemiological Processes.
@@ -96,7 +96,7 @@ namespace Landis.Extension.BaseEDA
             //PDiseased.ActiveSiteValues = 0; uncomment only if not using multi-agent 
             AgentName.ActiveSiteValues = "";
 
-            cohorts = PlugIn.ModelCore.GetSiteVar<ISiteCohorts>("Succession.AgeCohorts"); //get age cohorts from succession extension
+            cohorts = PlugIn.ModelCore.GetSiteVar<ISiteCohorts>("Succession.UniversalCohorts"); 
 
             //LOOP through each active pixel in the landscape and for each one of them
             //initialize a dictionary to keep track of numbers of cohorts killed as part of special dead fuel or as those for inclusion in mortality plot

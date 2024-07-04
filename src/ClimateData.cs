@@ -9,7 +9,7 @@ using System.Text;
 using System.Data;
 using Landis.Core;
 
-namespace Landis.Extension.BaseEDA
+namespace Landis.Extension.EDA
 {
     class ClimateData
     {

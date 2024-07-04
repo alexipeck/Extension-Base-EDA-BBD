@@ -7,7 +7,7 @@ using Landis.Utilities;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Landis.Extension.BaseEDA
+namespace Landis.Extension.EDA
 {
     /// <summary>
     /// A parser that reads the extension parameters from text input.
