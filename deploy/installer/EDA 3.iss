@@ -19,7 +19,7 @@
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 ; AppId={{!<Generate a New GUID>}
-AppId={{26AA6A49-5368-48DB-8246-FE2DE67A6184}}
+AppId={{4036FADC-25DF-49A3-AEB4-7252644F0644}}
 AppName={#CoreRelease} {#ExtensionName}
 AppVersion={#AppVersion}
 ; Name in "Programs and Features"

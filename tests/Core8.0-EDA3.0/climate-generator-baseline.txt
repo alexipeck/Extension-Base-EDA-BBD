@@ -9,7 +9,9 @@ SpinUpClimateFile			LTB_91_10.csv
 SpinUpClimateFileFormat			Daily_Temp-C_Precip-mmDay
 
 UsingFireClimate			yes
-RelativeHumiditySlopeAdjust             77.68
-SpringStart				30
-WinterStart				320
+FineFuelMoistureCode			100
+DuffMoistureCode			100
+DroughtCode				100
+FirstDayFire				30
+LastDayFire				320
 

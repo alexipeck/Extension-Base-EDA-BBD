@@ -61,7 +61,7 @@ namespace Landis.Extension.EDA
         //list of spp to be included in the mortality plot.
         private static ISiteVar<Dictionary<int, int>> numberMortSppKilled;
 
-        private static ISiteVar<ISiteCohorts> cohorts;                                              
+        private static ISiteVar<SiteCohorts> cohorts;                                              
         private static ISiteVar<string> agentName;
 
         //---------------------------------------------------------------------
@@ -96,7 +96,7 @@ namespace Landis.Extension.EDA
             //PDiseased.ActiveSiteValues = 0; uncomment only if not using multi-agent 
             AgentName.ActiveSiteValues = "";
 
-            cohorts = PlugIn.ModelCore.GetSiteVar<ISiteCohorts>("Succession.UniversalCohorts"); 
+            cohorts = PlugIn.ModelCore.GetSiteVar<SiteCohorts>("Succession.UniversalCohorts"); 
 
             //LOOP through each active pixel in the landscape and for each one of them
             //initialize a dictionary to keep track of numbers of cohorts killed as part of special dead fuel or as those for inclusion in mortality plot
@@ -365,7 +365,7 @@ namespace Landis.Extension.EDA
             }
         }
         //---------------------------------------------------------------------
-        public static ISiteVar<ISiteCohorts> Cohorts
+        public static ISiteVar<SiteCohorts> Cohorts
         {
             get
             {

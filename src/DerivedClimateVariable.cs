@@ -498,6 +498,7 @@ namespace Landis.Extension.EDA
             //int maxSpinUpYear = Climate.Spinup_DailyData.Keys.Max();
             //int minFutureYear = AnnualWeather.Year;
             //actualYear = minFutureYear + (currentYear - 1);
+
             int numDailyRecords = 365;
             if (Climate.Spinup_DailyData != null)
             {

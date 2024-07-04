@@ -225,3 +225,20 @@ tests/Version2.0 test/Climate-future-input-log.csv
 tests/Version2.0 test/Climate-spinup-input-log.csv
 tests/Core8.0-EDA3.0/Landis-climate-log.txt
 tests/Core8.0-EDA3.0/Landis-log.txt
+tests/Core8.0-EDA3.0/Metadata/EDA/EDA.xml
+tests/Core8.0-EDA3.0/Metadata/EDA/EventLog_Metadata.xml
+tests/Core8.0-EDA3.0/Metadata/LANDIS-II v8.0/LANDIS-II v8.0.xml
+tests/Core8.0-EDA3.0/Metadata/NECN-Succession/CalibrateLog_Metadata.xml
+tests/Core8.0-EDA3.0/Metadata/NECN-Succession/EstablishmentLog_Metadata.xml
+tests/Core8.0-EDA3.0/Metadata/NECN-Succession/MonthlyLog_Metadata.xml
+tests/Core8.0-EDA3.0/Metadata/NECN-Succession/NECN-Succession.xml
+tests/Core8.0-EDA3.0/Metadata/NECN-Succession/PrimaryLog_Metadata.xml
+tests/Core8.0-EDA3.0/Metadata/NECN-Succession/PrimaryLogShort_Metadata.xml
+tests/Core8.0-EDA3.0/Metadata/NECN-Succession/ReproductionLog_Metadata.xml
+tests/Core8.0-EDA3.0/Metadata/Climate-Library/Annual-Log_Metadata.xml
+tests/Core8.0-EDA3.0/Metadata/Climate-Library/Climate-Library.xml
+tests/Core8.0-EDA3.0/Metadata/Climate-Library/Future-Input-Log_Metadata.xml
+tests/Core8.0-EDA3.0/Metadata/Climate-Library/Spinup-Input-Log_Metadata.xml
+tests/Core8.0-EDA3.0/NECN-calibrate-log.csv
+tests/Core8.0-EDA3.0/NECN-reproduction-log.csv
+tests/Core8.0-EDA3.0/eda/eda-log.csv
