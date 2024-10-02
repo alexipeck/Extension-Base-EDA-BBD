@@ -49,7 +49,7 @@ namespace Landis.Extension.EDA
         /// <summary>
         /// Climate Data
         /// </summary>
-        AnnualClimate_Monthly ClimateData
+        AnnualClimate ClimateData
         {
             get;
             set;
@@ -75,7 +75,7 @@ namespace Landis.Extension.EDA
         private string name;
         private string climateLibVariable;
         private string sourceName;
-        private AnnualClimate_Monthly climateData;
+        private AnnualClimate climateData;
         private string transform;
         //---------------------------------------------------------------------
 
@@ -128,7 +128,7 @@ namespace Landis.Extension.EDA
         /// <summary>
         /// Climate Data
         /// </summary>
-        public AnnualClimate_Monthly ClimateData
+        public AnnualClimate ClimateData
         {
             get
             {
@@ -180,11 +180,12 @@ namespace Landis.Extension.EDA
         {
             Dictionary<IEcoregion, double> ecoClimateVars = new Dictionary<IEcoregion, double>();
 
-            foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
+            foreach (var ecoregion in PlugIn.ModelCore.Ecoregions.Where(x => x.Active)) 
+                //foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
             {
                 double transformValue = 0;
-                if (ecoregion.Active)
-                {
+                //if (ecoregion.Active)
+                //{
                     // Calculate Derived Climate Variables
                     Dictionary<string, double[]> dailyDerivedClimate = DerivedClimateVariable.CalculateDerivedClimateVariables(agent, ecoregion);
                     int numDailyRecords = dailyDerivedClimate[dailyDerivedClimate.Keys.First()].Length;
@@ -219,7 +220,7 @@ namespace Landis.Extension.EDA
                                 double[] variableArray;
                                 if (climVar.SourceName.Equals("Library", StringComparison.OrdinalIgnoreCase))
                                 {
-                                    AnnualClimate_Daily AnnualWeather = Climate.Future_DailyData[Climate.Future_DailyData.Keys.Min()][ecoregion.Index];
+                                    AnnualClimate AnnualWeather = Climate.Future_DailyData[Climate.Future_DailyData.Keys.Min()][ecoregion.Index];
                                     int minFutureYear = Climate.Future_DailyData.Keys.Min();
                                     int year = PlugIn.ModelCore.CurrentTime;
                                     if (year < 1)
@@ -313,7 +314,7 @@ namespace Landis.Extension.EDA
                         string mesg = string.Format("Annual Weather Index function is {1}; expected 'sum' or 'mean'.", agent.AnnualWeatherIndex.Function);
                         throw new System.ApplicationException(mesg);
                     }
-                }
+                //}
                 ecoClimateVars[ecoregion] = transformValue;
 
             }
@@ -340,7 +341,9 @@ namespace Landis.Extension.EDA
             //int[] monthlyYears = Climate.Spinup_MonthlyData.Keys.ToArray();
             //int[] years = (Enumerable.Range(0, PlugIn.ModelCore.EndTime+1).ToArray());
             List<int> yearList = (Enumerable.Range(0, PlugIn.ModelCore.EndTime+1).ToList());
-           
+
+            yearList = Climate.SpinupEcoregionYearClimate[0].ToList();
+
             if (Climate.Spinup_DailyData != null)
             {
                 yearList = Climate.Spinup_DailyData.Keys.ToList();
