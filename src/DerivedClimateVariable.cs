@@ -248,28 +248,28 @@ namespace Landis.Extension.EDA
                 int numDailyRecords = AnnualWeather.DailyTemp.Length;
             */
                 int numDailyRecords = 365;
-                if (Climate.Spinup_DailyData != null)
-                {
-                    AnnualClimate_Daily AnnualWeather = Climate.Future_DailyData[Climate.Future_DailyData.Keys.Min()][ecoregion.Index];
-                    int minFutureYear = Climate.Future_DailyData.Keys.Min();
-                    if (year < 1)
-                    {
-                        AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
-                    }
-                    else
-                    {
-                        if(year < minFutureYear)
-                        {
-                            year = minFutureYear + (year - 1);
-                        }
-                        if (year != Climate.Future_DailyData.Keys.Min())
-                        {
-                            AnnualWeather = Climate.Future_DailyData[year][ecoregion.Index];
-                        }
-                    }
+                //if (Climate.Spinup_DailyData != null)
+                //{
+                //    AnnualClimate_Daily AnnualWeather = Climate.Future_DailyData[Climate.Future_DailyData.Keys.Min()][ecoregion.Index];
+                //    int minFutureYear = Climate.Future_DailyData.Keys.Min();
+                //    if (year < 1)
+                //    {
+                //        AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
+                //    }
+                //    else
+                //    {
+                //        if(year < minFutureYear)
+                //        {
+                //            year = minFutureYear + (year - 1);
+                //        }
+                //        if (year != Climate.Future_DailyData.Keys.Min())
+                //        {
+                //            AnnualWeather = Climate.Future_DailyData[year][ecoregion.Index];
+                //        }
+                //    }
                     
-                    numDailyRecords = AnnualWeather.DailyTemp.Length;
-                }
+                //    numDailyRecords = AnnualWeather.DailyTemp.Length;
+                //}
                 Dictionary<string, double[]> dailyDerivedClimate = new Dictionary<string, double[]>();
                 double[] blankRecords = new double[numDailyRecords];
                 dailyDerivedClimate.Add("JulianDay", blankRecords);
@@ -311,18 +311,20 @@ namespace Landis.Extension.EDA
                             double[] variableArray;
                             if (selectClimateVar.SourceName.Equals("Library", StringComparison.OrdinalIgnoreCase))
                             {
-                                AnnualClimate_Daily AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
-                                if (PlugIn.ModelCore.CurrentTime > 0)
-                                {
-                                    AnnualWeather = Climate.Future_DailyData[year][ecoregion.Index];
-                                }
+                                //AnnualClimate_Daily AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
+                                //if (PlugIn.ModelCore.CurrentTime > 0)
+                                //{
+                                //    AnnualWeather = Climate.Future_DailyData[year][ecoregion.Index];
+                                //}
                                 if (selectClimateVar.ClimateLibVariable.Equals("DailyTemp", StringComparison.OrdinalIgnoreCase))
                                 {
-                                    variableArray = AnnualWeather.DailyTemp;
+                                    //variableArray = AnnualWeather.DailyTemp;
+                                    variableArray = Climate.FutureEcoregionYearClimate[ecoregion.Index][year].DailyTemp.ToArray();
                                 }
                                 else if (selectClimateVar.ClimateLibVariable.Equals("DailyPrecip", StringComparison.OrdinalIgnoreCase))
                                 {
-                                    variableArray = AnnualWeather.DailyPrecip;
+                                    //variableArray = AnnualWeather.DailyPrecip;
+                                    variableArray = Climate.FutureEcoregionYearClimate[ecoregion.Index][year].DailyPrecip.ToArray();
                                 }
                                 else
                                 {
@@ -376,11 +378,12 @@ namespace Landis.Extension.EDA
                                 {
                                     if (derClimVar.Source.Equals("Library", StringComparison.OrdinalIgnoreCase))
                                     {
-                                        AnnualClimate_Daily AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
-                                        if (PlugIn.ModelCore.CurrentTime > 0)
-                                        {
-                                            AnnualWeather = Climate.Future_DailyData[year][ecoregion.Index];
-                                        }
+                                        //AnnualClimate_Daily AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
+                                        AnnualClimate AnnualWeather = Climate.FutureEcoregionYearClimate[ecoregion.Index][year];
+                                    //if (PlugIn.ModelCore.CurrentTime > 0)
+                                    //    {
+                                    //        AnnualWeather = Climate.Future_DailyData[year][ecoregion.Index];
+                                    //    }
                                         if (derClimVar.ClimateVariable.Equals("DailyPrecip", StringComparison.OrdinalIgnoreCase))
                                         {
                                             dailyDerivedClimate[derClimVar.Name][i] = AnnualWeather.DailyPrecip[i];
@@ -414,11 +417,12 @@ namespace Landis.Extension.EDA
                                     double varCount = 0;
                                     if (derClimVar.Source.Equals("Library", StringComparison.OrdinalIgnoreCase))
                                     {
-                                        AnnualClimate_Daily AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
-                                        if (PlugIn.ModelCore.CurrentTime > 0)
-                                        {
-                                            AnnualWeather = Climate.Future_DailyData[year][ecoregion.Index];
-                                        }
+                                        AnnualClimate AnnualWeather = Climate.FutureEcoregionYearClimate[ecoregion.Index][year];
+                                    //AnnualClimate_Daily AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
+                                    //if (PlugIn.ModelCore.CurrentTime > 0)
+                                    //    {
+                                    //        AnnualWeather = Climate.Future_DailyData[year][ecoregion.Index];
+                                    //    }
                                         if (derClimVar.ClimateVariable.Equals("DailyPrecip", StringComparison.OrdinalIgnoreCase))
                                         {
                                             for (int n = 0; n < derClimVar.Count; n++)
@@ -500,11 +504,11 @@ namespace Landis.Extension.EDA
             //actualYear = minFutureYear + (currentYear - 1);
 
             int numDailyRecords = 365;
-            if (Climate.Spinup_DailyData != null)
-            {
-                AnnualClimate_Daily AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
-                numDailyRecords = AnnualWeather.DailyTemp.Length;
-            }
+            //if (Climate.Spinup_DailyData != null)
+            //{
+            //    AnnualClimate_Daily AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
+            //    numDailyRecords = AnnualWeather.DailyTemp.Length;
+            //}
             Dictionary<string, double[]> dailyDerivedClimate = new Dictionary<string, double[]>();
             double[] blankRecords = new double[numDailyRecords];
             dailyDerivedClimate.Add("JulianDay", blankRecords);
@@ -545,18 +549,19 @@ namespace Landis.Extension.EDA
                         double[] variableArray;
                         if (selectClimateVar.SourceName.Equals("Library", StringComparison.OrdinalIgnoreCase))
                         {
-                            AnnualClimate_Daily AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
-                            if (PlugIn.ModelCore.CurrentTime > 0)
-                            {
-                                AnnualWeather = Climate.Future_DailyData[year][ecoregion.Index];
-                            }
+                            AnnualClimate AnnualWeather = Climate.FutureEcoregionYearClimate[ecoregion.Index][year];
+                            //AnnualClimate_Daily AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
+                            //if (PlugIn.ModelCore.CurrentTime > 0)
+                            //{
+                            //    AnnualWeather = Climate.Future_DailyData[year][ecoregion.Index];
+                            //}
                             if (selectClimateVar.ClimateLibVariable.Equals("DailyTemp", StringComparison.OrdinalIgnoreCase))
                             {
-                                variableArray = AnnualWeather.DailyTemp;
+                                variableArray = AnnualWeather.DailyTemp.ToArray();
                             }
                             else if (selectClimateVar.ClimateLibVariable.Equals("DailyPrecip", StringComparison.OrdinalIgnoreCase))
                             {
-                                variableArray = AnnualWeather.DailyPrecip;
+                                variableArray = AnnualWeather.DailyPrecip.ToArray();
                             }
                             else
                             {
@@ -600,11 +605,12 @@ namespace Landis.Extension.EDA
                             {
                                 if (derClimVar.Source.Equals("Library", StringComparison.OrdinalIgnoreCase))
                                 {
-                                    AnnualClimate_Daily AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
-                                    if (PlugIn.ModelCore.CurrentTime > 0)
-                                    {
-                                        AnnualWeather = Climate.Future_DailyData[year][ecoregion.Index];
-                                    }
+                                    AnnualClimate AnnualWeather = Climate.FutureEcoregionYearClimate[ecoregion.Index][year];
+                                    //AnnualClimate_Daily AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
+                                    //if (PlugIn.ModelCore.CurrentTime > 0)
+                                    //{
+                                    //    AnnualWeather = Climate.Future_DailyData[year][ecoregion.Index];
+                                    //}
                                     if (derClimVar.ClimateVariable.Equals("DailyPrecip", StringComparison.OrdinalIgnoreCase))
                                     {
                                         dailyDerivedClimate[derClimVar.Name][i] = AnnualWeather.DailyPrecip[i];
@@ -644,11 +650,12 @@ namespace Landis.Extension.EDA
                                         {
                                             if (derClimVar.Source.Equals("Library", StringComparison.OrdinalIgnoreCase))
                                             {
-                                                AnnualClimate_Daily AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
-                                                if (PlugIn.ModelCore.CurrentTime > 0)
-                                                {
-                                                    AnnualWeather = Climate.Future_DailyData[year][ecoregion.Index];
-                                                }
+                                                AnnualClimate AnnualWeather = Climate.FutureEcoregionYearClimate[ecoregion.Index][year];
+                                            //AnnualClimate_Daily AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
+                                            //if (PlugIn.ModelCore.CurrentTime > 0)
+                                            //    {
+                                            //        AnnualWeather = Climate.Future_DailyData[year][ecoregion.Index];
+                                            //    }
                                                 if (derClimVar.ClimateVariable.Equals("DailyPrecip", StringComparison.OrdinalIgnoreCase))
                                                 {
                                                     varSum += AnnualWeather.DailyPrecip[recIndex];

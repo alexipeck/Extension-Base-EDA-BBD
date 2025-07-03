@@ -220,34 +220,36 @@ namespace Landis.Extension.EDA
                                 double[] variableArray;
                                 if (climVar.SourceName.Equals("Library", StringComparison.OrdinalIgnoreCase))
                                 {
-                                    AnnualClimate AnnualWeather = Climate.Future_DailyData[Climate.Future_DailyData.Keys.Min()][ecoregion.Index];
-                                    int minFutureYear = Climate.Future_DailyData.Keys.Min();
-                                    int year = PlugIn.ModelCore.CurrentTime;
-                                    if (year < 1)
-                                    {
-                                        AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
-                                    }
-                                    else
-                                    {
-                                        if (year < minFutureYear)
-                                        {
-                                            year = minFutureYear + (year - 1);
-                                        }
-                                        if (year != Climate.Future_DailyData.Keys.Min())
-                                        {
-                                            AnnualWeather = Climate.Future_DailyData[year][ecoregion.Index];
-                                        }
-                                    }
+                                    //AnnualClimate AnnualWeather = Climate.Future_DailyData[Climate.Future_DailyData.Keys.Min()][ecoregion.Index];
+                                    //int minFutureYear = Climate.Future_DailyData.Keys.Min();
+                                    //int year = PlugIn.ModelCore.CurrentTime;
+                                    //if (year < 1)
+                                    //{
+                                    //    AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
+                                    //}
+                                    //else
+                                    //{
+                                    //    if (year < minFutureYear)
+                                    //    {
+                                    //        year = minFutureYear + (year - 1);
+                                    //    }
+                                    //    if (year != Climate.Future_DailyData.Keys.Min())
+                                    //    {
+                                    //        AnnualWeather = Climate.Future_DailyData[year][ecoregion.Index];
+                                    //    }
+                                    //}
 
 
                                     if (climVar.ClimateLibVariable.Equals("DailyTemp", StringComparison.OrdinalIgnoreCase))
                                     {
-                                        variableArray = AnnualWeather.DailyTemp;
+                                        //variableArray = AnnualWeather.DailyTemp; 
+                                        variableArray = Climate.FutureEcoregionYearClimate[ecoregion.Index][PlugIn.ModelCore.CurrentTime].DailyTemp.ToArray(); 
                                     }
                                     else if (climVar.ClimateLibVariable.Equals("DailyPrecip", StringComparison.OrdinalIgnoreCase))
                                     {
-                                        variableArray = AnnualWeather.DailyPrecip;
-                                    }
+                                    //variableArray = AnnualWeather.DailyPrecip;
+                                    variableArray = Climate.FutureEcoregionYearClimate[ecoregion.Index][PlugIn.ModelCore.CurrentTime].DailyPrecip.ToArray();
+                                }
                                     else
                                     {
                                         string mesg = string.Format("Only 'DailyTemp' and 'DailyPrecip' are supported for ClimateVar in ClimateVariables");
@@ -342,41 +344,48 @@ namespace Landis.Extension.EDA
             //int[] years = (Enumerable.Range(0, PlugIn.ModelCore.EndTime+1).ToArray());
             List<int> yearList = (Enumerable.Range(0, PlugIn.ModelCore.EndTime+1).ToList());
 
-            yearList = Climate.SpinupEcoregionYearClimate[0].ToList();
+            //yearList = Climate.SpinupEcoregionYearClimate[0].ToList();
 
-            if (Climate.Spinup_DailyData != null)
-            {
-                yearList = Climate.Spinup_DailyData.Keys.ToList();
-            }
-            else
-            {
-                int dataIndex = 0;
-                foreach (KeyValuePair<string, ExternalClimateYear> climateYear in PlugIn.loadedClimateData.ExternalData)
-                {
-                    List<int> climateYearArray = climateYear.Value.YearClimate.Keys.ToList();
-                    if (dataIndex == 0)
-                    {
-                        yearList = climateYearArray;
-                    }
-                    else
-                    {
-                        foreach(int year in climateYearArray)
-                        {
-                            if(!yearList.Contains(year))
-                            {
-                                yearList.Add(year);
-                            }
-                        }
-                    }
-                }
-            }
-            yearList.Sort();
+            int numSpinupYears = Climate.SpinupEcoregionYearClimate.GetLength(1);
+            //List<int> yearList2 = Climate.SpinupEcoregionYearClimate.ToList();
+            //int numYear = PlugIn.ModelCore.EndTime;
+
+            //if (Climate.Spinup_DailyData != null)
+            //{
+            //    yearList = Climate.Spinup_DailyData.Keys.ToList();
+            //}
+            //else
+            //{
+            //    int dataIndex = 0;
+            //    foreach (KeyValuePair<string, ExternalClimateYear> climateYear in PlugIn.loadedClimateData.ExternalData)
+            //    {
+            //        List<int> climateYearArray = climateYear.Value.YearClimate.Keys.ToList();
+            //        if (dataIndex == 0)
+            //        {
+            //            yearList = climateYearArray;
+            //        }
+            //        else
+            //        {
+            //            foreach(int year in climateYearArray)
+            //            {
+            //                if(!yearList.Contains(year))
+            //                {
+            //                    yearList.Add(year);
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+            //yearList.Sort();
             foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
             {               
                     double ecoTotal = 0;
                     if (ecoregion.Active)
                     {
-                        foreach (int year in yearList)
+
+
+                        //foreach (int year in yearList)
+                        for (int year = 0; year <= numSpinupYears; year++) 
                         {
 
                             // Calculate Derived Climate Variables
@@ -413,14 +422,16 @@ namespace Landis.Extension.EDA
                                         double[] variableArray;
                                         if (climVar.SourceName.Equals("Library", StringComparison.OrdinalIgnoreCase))
                                         {
-                                            AnnualClimate_Daily AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
+                                            //AnnualClimate_Daily AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
                                             if (climVar.ClimateLibVariable.Equals("DailyTemp", StringComparison.OrdinalIgnoreCase))
                                             {
-                                                variableArray = AnnualWeather.DailyTemp;
+                                                //variableArray = AnnualWeather.DailyTemp;
+                                                variableArray = Climate.SpinupEcoregionYearClimate[ecoregion.Index][year].DailyTemp.ToArray();
                                             }
                                             else if (climVar.ClimateLibVariable.Equals("DailyPrecip", StringComparison.OrdinalIgnoreCase))
                                             {
-                                                variableArray = AnnualWeather.DailyPrecip;
+                                                //variableArray = AnnualWeather.DailyPrecip;
+                                                variableArray = Climate.SpinupEcoregionYearClimate[ecoregion.Index][year].DailyPrecip.ToArray();
                                             }
                                             else
                                             {
@@ -450,6 +461,8 @@ namespace Landis.Extension.EDA
                                 }
 
                             }
+
+
                             //Summarize annual
                             double monthTotal = 0;
                             int monthCount = 0;
