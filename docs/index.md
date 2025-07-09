@@ -18,7 +18,7 @@ To use BDA, you need:
 
 # Download and Install the Extension
 
-The latest version can be downloaded [here](https://github.com/LANDIS-II-Foundation/Extension-Base-EDA/blob/master/deploy/installer/LANDIS-II-V7%20Base%20EDA%203.0-setup.exe). To install it on your computer, launch the installer.
+The latest version can be downloaded [here](https://github.com/LANDIS-II-Foundation/Extension-Base-EDA/blob/master/deploy/installer/LANDIS-II-V8%20EDA%203.0-setup.exe). To install it on your computer, launch the installer.
 
 # Citation
 
