@@ -5,7 +5,7 @@ The EDA (Epidemiological Disturbance Agent) extention is created and maintained 
 # Release Notes
 
 - Latest official release: Version 3.0 — July 2025
-- [View User Guide](https://github.com/LANDIS-II-Foundation/Extension-Base-EDA/blob/master/docs/LANDIS-II%20Epidemiological%20Disturbance%20Agent%20v3.0%20User%20Guide.pdf).
+- [View User Guide](https://github.com/LANDIS-II-Foundation/Extension-Base-EDA/blob/master/docs/LANDIS-II%20Epidemiological%20Disturbance%20Agent%20v3%20User%20Guide.pdf).
 - [View User Guide for Climate Library](https://github.com/LANDIS-II-Foundation/Library-Climate/blob/master/docs/LANDIS-II%20Climate%20Library%20v5.0%20User%20Guide.pdf)
 - Full release details found in the User Guide and on GitHub.
 
