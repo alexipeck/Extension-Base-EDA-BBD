@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
-namespace Landis.Extension.BaseEDA
+namespace Landis.Extension.EDA
 {
     ///<summary>
     /// A disturbance plug-in that simulates Pathogen Dispersal and Disease.
@@ -19,7 +19,7 @@ namespace Landis.Extension.BaseEDA
         : ExtensionMain
     {
         public static readonly ExtensionType type = new ExtensionType("disturbance:eda");
-        public static readonly string ExtensionName = "Base EDA";
+        public static readonly string ExtensionName = "EDA";
         public static MetadataTable<EventsLog> EventLog;
         public static ExternalClimateData loadedClimateData;
 
@@ -28,7 +28,6 @@ namespace Landis.Extension.BaseEDA
 
         private IEnumerable<IAgent> manyAgentParameters;
         private static IInputParameters parameters;
-        private static ICore modelCore;
         private bool reinitialized;
         
 
@@ -44,23 +43,19 @@ namespace Landis.Extension.BaseEDA
         public override void LoadParameters(string dataFile,
                                             ICore mCore)
         {
-            modelCore = mCore;
-            InputParameterParser.EcoregionsDataset = modelCore.Ecoregions;
+            ModelCore = mCore;
+            InputParameterParser.EcoregionsDataset = ModelCore.Ecoregions;
             InputParameterParser parser = new InputParameterParser();
             parameters = Landis.Data.Load<IInputParameters>(dataFile, parser);
         }
 
         //---------------------------------------------------------------------
 
-        public static ICore ModelCore
-        {
-            get
-            {
-                return modelCore;
-            }
-        }
+        public static ICore ModelCore { get; private set; }
+        public override void AddCohortData(){return;}
 
-         /// <summary>
+
+        /// <summary>
         /// Initializes the extension with a data file.
         /// </summary>
         public override void Initialize()
@@ -82,14 +77,14 @@ namespace Landis.Extension.BaseEDA
 
             //initialize site variables:
             int numAgents = parameters.ManyAgentParameters.Count();
-            SiteVars.Initialize(modelCore, numAgents);
+            SiteVars.Initialize(ModelCore, numAgents);
 
             //Dispersal probdisp = new Dispersal();
             manyAgentParameters = parameters.ManyAgentParameters;
             int agentIndex = 0;
 
             //Initialize non-library climate data
-            loadedClimateData = ClimateData.ReadClimateData(manyAgentParameters);
+            //loadedClimateData = ClimateData.ReadClimateData(manyAgentParameters);
 
             foreach (IAgent activeAgent in manyAgentParameters)
             {
@@ -144,8 +139,8 @@ namespace Landis.Extension.BaseEDA
 
                         //----- Write Infection Status maps (SUSCEPTIBLE (0), INFECTED (cryptic-non symptomatic) (1), DISEASED (symptomatic) (2) --------
                         string path = MapNames.ReplaceTemplateVars(statusMapName, activeAgent.AgentName, ModelCore.CurrentTime);
-                        modelCore.UI.WriteLine("   Writing infection status map to {0} ...", path);
-                        using (IOutputRaster<BytePixel> outputRaster = modelCore.CreateRaster<BytePixel>(path, modelCore.Landscape.Dimensions))
+                        ModelCore.UI.WriteLine("   Writing infection status map to {0} ...", path);
+                        using (IOutputRaster<BytePixel> outputRaster = ModelCore.CreateRaster<BytePixel>(path, ModelCore.Landscape.Dimensions))
                         {
                             BytePixel pixel = outputRaster.BufferPixel;
                             foreach (Site site in ModelCore.Landscape.AllSites)
@@ -168,8 +163,8 @@ namespace Landis.Extension.BaseEDA
                    
                             //----- Write Cohort Mortality Maps (number dead cohorts for selected species) --------
                             string path2 = MapNames.ReplaceTemplateVars(mortMapNames, activeAgent.AgentName, ModelCore.CurrentTime);
-                            modelCore.UI.WriteLine("   Writing cohort mortality map to {0} ...", path2);
-                            using (IOutputRaster<ShortPixel> outputRaster = modelCore.CreateRaster<ShortPixel>(path2, modelCore.Landscape.Dimensions))
+                            ModelCore.UI.WriteLine("   Writing cohort mortality map to {0} ...", path2);
+                            using (IOutputRaster<ShortPixel> outputRaster = ModelCore.CreateRaster<ShortPixel>(path2, ModelCore.Landscape.Dimensions))
                             {
                                 ShortPixel pixel = outputRaster.BufferPixel;
                                 foreach (Site site in ModelCore.Landscape.AllSites)

@@ -1,0 +1,10 @@
+LandisData  Ecoregions
+
+>>         Map
+>> Active  Code  Name   Description
+>> ------  ----  -----  -----------
+      yes    1   1   "unknown"
+      yes    2   2   "unknown"
+       yes    3   3   "unknown"
+      yes 4	4    "unknown"
+      yes 5	5    "unknown"

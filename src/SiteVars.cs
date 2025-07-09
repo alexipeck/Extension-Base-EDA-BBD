@@ -4,10 +4,10 @@
 
 using Landis.Core;
 using Landis.SpatialModeling;
-using Landis.Library.AgeOnlyCohorts;
+using Landis.Library.UniversalCohorts;
 using System.Collections.Generic;
 
-namespace Landis.Extension.BaseEDA
+namespace Landis.Extension.EDA
 {
     ///<summary>
     /// Site Variables for a disturbance plug-in that simulates Epidemiological Processes.
@@ -61,7 +61,7 @@ namespace Landis.Extension.BaseEDA
         //list of spp to be included in the mortality plot.
         private static ISiteVar<Dictionary<int, int>> numberMortSppKilled;
 
-        private static ISiteVar<ISiteCohorts> cohorts;                                              
+        private static ISiteVar<SiteCohorts> cohorts;                                              
         private static ISiteVar<string> agentName;
 
         //---------------------------------------------------------------------
@@ -96,7 +96,7 @@ namespace Landis.Extension.BaseEDA
             //PDiseased.ActiveSiteValues = 0; uncomment only if not using multi-agent 
             AgentName.ActiveSiteValues = "";
 
-            cohorts = PlugIn.ModelCore.GetSiteVar<ISiteCohorts>("Succession.AgeCohorts"); //get age cohorts from succession extension
+            cohorts = PlugIn.ModelCore.GetSiteVar<SiteCohorts>("Succession.UniversalCohorts"); 
 
             //LOOP through each active pixel in the landscape and for each one of them
             //initialize a dictionary to keep track of numbers of cohorts killed as part of special dead fuel or as those for inclusion in mortality plot
@@ -365,7 +365,7 @@ namespace Landis.Extension.BaseEDA
             }
         }
         //---------------------------------------------------------------------
-        public static ISiteVar<ISiteCohorts> Cohorts
+        public static ISiteVar<SiteCohorts> Cohorts
         {
             get
             {

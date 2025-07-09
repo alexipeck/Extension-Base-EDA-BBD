@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Landis.Extension.BaseEDA
+namespace Landis.Extension.EDA
 {
     public class ExternalClimateVariableValues
     {

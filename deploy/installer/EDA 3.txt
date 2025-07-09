@@ -1,0 +1,9 @@
+LandisData   Extension
+
+Name         "EDA"
+Version      "3.0"
+Type         disturbance:EDA
+Assembly     Landis.Extension.EDA-v3
+Class        Landis.Extension.EDA.PlugIn
+Description  "Epidemiological disturbance agents"
+CoreVersion  8.0

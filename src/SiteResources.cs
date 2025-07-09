@@ -3,11 +3,11 @@
 //  Authors:  Francesco Tonini, Brian R. Miranda, Chris Jones
 
 using Landis.Core;
-using Landis.Library.AgeOnlyCohorts;
+using Landis.Library.UniversalCohorts;
 using Landis.SpatialModeling;
 using System.Collections.Generic;
 
-namespace Landis.Extension.BaseEDA
+namespace Landis.Extension.EDA
 {
 
     public class SiteResources

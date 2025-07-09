@@ -3,16 +3,16 @@
 //  Authors:  Francesco Tonini, Brian R. Miranda, Chris Jones
 
 using Landis.Core;
-using Landis.Library.AgeOnlyCohorts;
+using Landis.Library.UniversalCohorts;
 using Landis.SpatialModeling;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Landis.Extension.BaseEDA
+namespace Landis.Extension.EDA
 {
     public class Epidemic
-        : ICohortDisturbance
+        : IDisturbance
 
     {
         private static IEcoregionDataset ecoregions;
@@ -334,7 +334,7 @@ namespace Landis.Extension.BaseEDA
 
             currentSite = site;
 
-            SiteVars.Cohorts[site].RemoveMarkedCohorts(this);
+            SiteVars.Cohorts[site].ReduceOrKillCohorts(this);
 
             int[] cohortsKilled = new int[3];
 
@@ -349,26 +349,26 @@ namespace Landis.Extension.BaseEDA
         // This is a filter to determine which cohorts are removed.
         // Each cohort is passed into the function and tested whether it should
         // be killed.
-        bool ICohortDisturbance.MarkCohortForDeath(ICohort cohort)
+        int IDisturbance.ReduceOrKillMarkedCohort(ICohort cohort)
         {
             
             bool killCohort = false;
 
             ISppParameters sppParms = epidemicParms.SppParameters[cohort.Species.Index];
  
-            if (cohort.Age >= sppParms.LowVulnHostAge)
+            if (cohort.Data.Age >= sppParms.LowVulnHostAge)
             {
                 if (random <= sppParms.LowVulnHostMortProb)
                    killCohort = true;
             }
 
-            if (cohort.Age >= sppParms.MediumVulnHostAge)
+            if (cohort.Data.Age >= sppParms.MediumVulnHostAge)
             {
                 if (random <= sppParms.MediumVulnHostMortProb)
                     killCohort = true;
             }
 
-            if (cohort.Age >= sppParms.HighVulnHostAge)
+            if (cohort.Data.Age >= sppParms.HighVulnHostAge)
             {
                 if (random <= sppParms.HighVulnHostMortProb)
                     killCohort = true;
@@ -384,9 +384,11 @@ namespace Landis.Extension.BaseEDA
                 if (sppParms.MortSppFlag)
                     siteMortSppKilled++;
 
+                return cohort.Data.Biomass;
+
             }
 
-            return killCohort;
+            return 0;
         }
 
         // check if the coordinates are inside the map 
