@@ -5,12 +5,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Data;
-using Landis.Core;
 
 namespace Landis.Extension.EDA
 {
+    // NOTE:  As revised by Rob Scheller, this class can be removed as EDA ONLY uses climate data provided 
+    // through the standard Climate Library
     class ClimateData
     {
         //---------------------------------------------------------------------

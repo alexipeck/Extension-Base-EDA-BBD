@@ -3,8 +3,8 @@ LandisData  Ecoregions
 >>         Map
 >> Active  Code  Name   Description
 >> ------  ----  -----  -----------
-      yes    1   eco1   "Mesic soils"
-      yes    2   eco2   "Sandy outwash plain"
-       yes    3   eco3   "Mesic soils"
-      yes 4	eco4    "na"
-      yes 5	eco5    "NA"
+      yes    1   1   "unknown"
+      yes    2   2   "unknown"
+       yes    3   3   "unknown"
+      yes 4	4    "unknown"
+      yes 5	5    "unknown"

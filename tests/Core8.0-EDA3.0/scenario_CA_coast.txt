@@ -1,7 +1,7 @@
 LandisData  Scenario
 
 
-Duration  50
+Duration  20
 
 Species   species_CA_coast.txt
 

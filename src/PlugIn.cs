@@ -84,7 +84,7 @@ namespace Landis.Extension.EDA
             int agentIndex = 0;
 
             //Initialize non-library climate data
-            loadedClimateData = ClimateData.ReadClimateData(manyAgentParameters);
+            //loadedClimateData = ClimateData.ReadClimateData(manyAgentParameters);
 
             foreach (IAgent activeAgent in manyAgentParameters)
             {
