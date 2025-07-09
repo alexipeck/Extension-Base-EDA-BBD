@@ -20,13 +20,13 @@ To use BDA, you need:
 
 The latest version can be downloaded [here](https://github.com/LANDIS-II-Foundation/Extension-Base-EDA/blob/master/deploy/installer/LANDIS-II-V8%20EDA%203.0-setup.exe). To install it on your computer, launch the installer.
 
-# Citation
-
-Tonini, F., C. Jones, B.R. Miranda, R.C. Cobb, B.R. Sturtevant, and R.K. Meentemeyer.  2018.  Modeling epidemiological disturbances in LANDIS-II.  Ecography 41: 1-7.
-
 # Example Files
 
 Example files are [here](https://downgit.github.io/#/home?url=https://github.com/LANDIS-II-Foundation/Extension-Base-EDA/tree/master/tests/Core7.0-EDA30.0).
+
+# Citation
+
+Tonini, F., C. Jones, B.R. Miranda, R.C. Cobb, B.R. Sturtevant, and R.K. Meentemeyer.  2018.  Modeling epidemiological disturbances in LANDIS-II.  Ecography 41: 1-7.
 
 # Support
 
