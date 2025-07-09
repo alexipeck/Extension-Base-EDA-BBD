@@ -2,7 +2,6 @@
 //  Forest Service Northern Research Station, Institute for Applied Ecosystem Studies
 //  Authors:  Francesco Tonini, Brian R. Miranda, Chris Jones
 
-using System;
 using System.IO;
 using Landis.SpatialModeling;
 

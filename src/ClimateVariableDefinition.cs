@@ -181,11 +181,8 @@ namespace Landis.Extension.EDA
             Dictionary<IEcoregion, double> ecoClimateVars = new Dictionary<IEcoregion, double>();
 
             foreach (var ecoregion in PlugIn.ModelCore.Ecoregions.Where(x => x.Active)) 
-                //foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
             {
                 double transformValue = 0;
-                //if (ecoregion.Active)
-                //{
                     // Calculate Derived Climate Variables
                     Dictionary<string, double[]> dailyDerivedClimate = DerivedClimateVariable.CalculateDerivedClimateVariables(agent, ecoregion);
                     int numDailyRecords = dailyDerivedClimate[dailyDerivedClimate.Keys.First()].Length;
@@ -342,13 +339,9 @@ namespace Landis.Extension.EDA
             //Dictionary<IEcoregion, double> ecoClimateVars = new Dictionary<IEcoregion, double>();
             //int[] monthlyYears = Climate.Spinup_MonthlyData.Keys.ToArray();
             //int[] years = (Enumerable.Range(0, PlugIn.ModelCore.EndTime+1).ToArray());
-            List<int> yearList = (Enumerable.Range(0, PlugIn.ModelCore.EndTime+1).ToList());
+            //List<int> yearList = (Enumerable.Range(0, PlugIn.ModelCore.EndTime+1).ToList());
 
-            //yearList = Climate.SpinupEcoregionYearClimate[0].ToList();
 
-            int numSpinupYears = Climate.SpinupEcoregionYearClimate.GetLength(1);
-            //List<int> yearList2 = Climate.SpinupEcoregionYearClimate.ToList();
-            //int numYear = PlugIn.ModelCore.EndTime;
 
             //if (Climate.Spinup_DailyData != null)
             //{
@@ -377,14 +370,13 @@ namespace Landis.Extension.EDA
             //    }
             //}
             //yearList.Sort();
-            foreach (IEcoregion ecoregion in PlugIn.ModelCore.Ecoregions)
-            {               
-                    double ecoTotal = 0;
-                    if (ecoregion.Active)
-                    {
+            int numSpinupYears = Climate.SpinupInputYearCount;
+
+            foreach (var ecoregion in PlugIn.ModelCore.Ecoregions.Where(x => x.Active))
+            {
+                double ecoTotal = 0;
 
 
-                        //foreach (int year in yearList)
                         for (int year = 0; year <= numSpinupYears; year++) 
                         {
 
@@ -505,8 +497,8 @@ namespace Landis.Extension.EDA
                             ecoTotal += transformValue;
 
                         }
-                    }
-                    agent.EcoWeatherIndexNormal[ecoregion.Index] = ecoTotal / yearList.Count;
+                    
+                    agent.EcoWeatherIndexNormal[ecoregion.Index] = ecoTotal / numSpinupYears;
                 
             }
             

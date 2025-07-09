@@ -504,6 +504,7 @@ namespace Landis.Extension.EDA
             //actualYear = minFutureYear + (currentYear - 1);
 
             int numDailyRecords = 365;
+            
             //if (Climate.Spinup_DailyData != null)
             //{
             //    AnnualClimate_Daily AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
