@@ -1,4 +1,4 @@
-LandisData "EDA"
+LandisData "EDA.BBD"
 
 Timestep	1
 
