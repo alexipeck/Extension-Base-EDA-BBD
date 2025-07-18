@@ -212,3 +212,5 @@ tests/**/*.csv
 tests/**/Landis-climate-log.txt
 tests/**/Landis-log.txt
 tests/**/Metadata/**/*.xml
+Landis-Log.txt
+tests/Core8.0-EDA3.0/console-output.txt
