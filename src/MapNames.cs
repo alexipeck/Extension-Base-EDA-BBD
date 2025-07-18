@@ -5,7 +5,7 @@
 using Landis.Utilities;
 using System.Collections.Generic;
 
-namespace Landis.Extension.EDA
+namespace Landis.Extension.EDA.BBD
 {
     /// <summary>
     /// Methods for working with the template for map filenames.

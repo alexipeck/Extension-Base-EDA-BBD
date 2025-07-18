@@ -7,7 +7,7 @@ using Landis.Library.UniversalCohorts;
 using Landis.SpatialModeling;
 using System.Collections.Generic;
 
-namespace Landis.Extension.EDA
+namespace Landis.Extension.EDA.BBD
 {
 
     public class SiteResources

@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 using Landis.Utilities;
-namespace Landis.Extension.EDA
+namespace Landis.Extension.EDA.BBD
 {
     /// <summary>
     /// Parameters for the extension.
@@ -38,7 +38,7 @@ namespace Landis.Extension.EDA
     }
 }
 
-namespace Landis.Extension.EDA
+namespace Landis.Extension.EDA.BBD
 {
     /// <summary>
     /// Parameters for the plug-in.

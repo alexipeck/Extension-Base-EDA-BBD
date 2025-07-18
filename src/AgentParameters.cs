@@ -8,7 +8,7 @@ using Landis.Utilities;
 using System.Collections.Generic;
 using System.Data;
 
-namespace Landis.Extension.EDA
+namespace Landis.Extension.EDA.BBD
 {
 
     public enum SHImode { max, mean };  //maybe add something new here, like weighted by biomass, or mean for each cohort?
@@ -58,7 +58,7 @@ namespace Landis.Extension.EDA
 }
 
 
-namespace Landis.Extension.EDA
+namespace Landis.Extension.EDA.BBD
 {
     /// <summary>
     /// Parameters for the plug-in.

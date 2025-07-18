@@ -5,7 +5,7 @@
 using System.IO;
 using Landis.SpatialModeling;
 
-namespace Landis.Extension.EDA
+namespace Landis.Extension.EDA.BBD
 {
     public class EpidemicRegions
     {

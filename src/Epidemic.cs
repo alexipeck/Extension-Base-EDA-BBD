@@ -9,7 +9,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Landis.Extension.EDA
+namespace Landis.Extension.EDA.BBD
 {
     public class Epidemic
         : IDisturbance

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
-namespace Landis.Extension.EDA
+namespace Landis.Extension.EDA.BBD
 {
     ///<summary>
     /// A disturbance plug-in that simulates Pathogen Dispersal and Disease.
@@ -18,8 +18,8 @@ namespace Landis.Extension.EDA
     public class PlugIn
         : ExtensionMain
     {
-        public static readonly ExtensionType type = new ExtensionType("disturbance:eda");
-        public static readonly string ExtensionName = "EDA";
+        public static readonly ExtensionType type = new ExtensionType("disturbance:eda.bbd");
+        public static readonly string ExtensionName = "EDA.BBD";
         public static MetadataTable<EventsLog> EventLog;
         public static ExternalClimateData loadedClimateData;
 

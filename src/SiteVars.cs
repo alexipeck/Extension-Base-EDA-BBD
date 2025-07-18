@@ -7,7 +7,7 @@ using Landis.SpatialModeling;
 using Landis.Library.UniversalCohorts;
 using System.Collections.Generic;
 
-namespace Landis.Extension.EDA
+namespace Landis.Extension.EDA.BBD
 {
     ///<summary>
     /// Site Variables for a disturbance plug-in that simulates Epidemiological Processes.

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Data;
 
-namespace Landis.Extension.EDA
+namespace Landis.Extension.EDA.BBD
 {
     // NOTE:  As revised by Rob Scheller, this class can be removed as EDA ONLY uses climate data provided 
     // through the standard Climate Library
