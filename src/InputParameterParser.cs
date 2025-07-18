@@ -77,6 +77,39 @@ namespace Landis.Extension.EDA.BBD
             ReadVar(logFile);
             parameters.LogFileName = logFile.Value;
 
+            // - species order -
+            InputVar<string> speciesOrderFile = new InputVar<string>("SpeciesOrder");
+            ReadVar(speciesOrderFile);
+            string speciesOrderPath = speciesOrderFile.Value;
+            var speciesOrderList = new List<string>();
+            var speciesDataset = PlugIn.ModelCore.Species;
+            int lineNum = 0;
+            foreach (var line in System.IO.File.ReadLines(speciesOrderPath))
+            {
+                lineNum++;
+                var trimmed = line.Trim();
+                if (string.IsNullOrEmpty(trimmed)) continue;
+                var found = false;
+                foreach (var species in speciesDataset)
+                {
+                    if (species.Name == trimmed)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    throw new InputValueException(trimmed, $"Species '{trimmed}' on line {lineNum} of SpeciesOrder file does not exist in scenario species list.");
+                }
+                speciesOrderList.Add(trimmed);
+            }
+            if (speciesOrderList.Count == 0)
+            {
+                throw new InputValueException(speciesOrderPath, "SpeciesOrder file must contain at least one valid species name.");
+            }
+            parameters.SpeciesOrder = speciesOrderList;
+
             //----------------------------------------------------------
             // Last, read in Agent File names,
             // then parse the data in those files into agent parameters.

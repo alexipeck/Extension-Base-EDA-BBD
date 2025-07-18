@@ -35,6 +35,11 @@ namespace Landis.Extension.EDA.BBD
         /// List of Agent Files
         /// </summary>
         IEnumerable<IAgent> ManyAgentParameters{get;set;}
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// List of species names in the order specified by the SpeciesOrder file.
+        /// </summary>
+        List<string> SpeciesOrder { get; set; }
     }
 }
 
@@ -51,6 +56,7 @@ namespace Landis.Extension.EDA.BBD
         private string mortMapNames;
         private string logFileName;
         private IEnumerable<IAgent> manyAgentParameters;
+        private List<string> speciesOrder;
 
         //---------------------------------------------------------------------
         /// <summary>
@@ -125,6 +131,19 @@ namespace Landis.Extension.EDA.BBD
             }
             set {
                 manyAgentParameters = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// List of species names in the order specified by the SpeciesOrder file.
+        /// </summary>
+        public List<string> SpeciesOrder
+        {
+            get {
+                return speciesOrder;
+            }
+            set {
+                speciesOrder = value;
             }
         }
 
