@@ -13,8 +13,11 @@ Copy-Item -Path "$ProjectDir\src\bin\Debug\netstandard2.0\Landis.Extension.EDA-v
 Copy-Item -Path "$ProjectDir\src\bin\Debug\netstandard2.0\Landis.Extension.EDA-v3-BBD.pdb" -Destination "$LandisExtensionsDir\" -Force
 
 cd $ProjectDir\tests\Core8.0-EDA3.0\
-Write-Output "Executing LANDIS-II..."
-landis-ii-8.cmd .\scenario_CA_coast.txt 2>&1 | Tee-Object -FilePath console-output.txt
-Write-Output "LANDIS-II execution completed."
-
-cd $ProjectDir\src\
+try {
+    Write-Output "Executing LANDIS-II..."
+    landis-ii-8.cmd .\scenario_CA_coast.txt 2>&1 | Tee-Object -FilePath console-output.txt
+    Write-Output "LANDIS-II execution completed."
+    cd $ProjectDir\src\
+} finally {
+    cd $ProjectDir\src\
+}
