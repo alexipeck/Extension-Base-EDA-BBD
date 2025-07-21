@@ -162,6 +162,7 @@ namespace Landis.Extension.EDA.BBD
                 }
                 // Directly index Queragri cohorts by age for transfer
                 foreach (var entry in biomassTransfer) {
+                    
                     var (targetSpecies, age) = entry.Key;
                     int transfer = entry.Value;
                     /* var speciesCohorts = siteCohorts[targetSpecies];
@@ -171,15 +172,20 @@ namespace Landis.Extension.EDA.BBD
                             cohort.ChangeBiomass(transfer);
                         }
                     } */
+                    bool found = false;
                     foreach (var speciesCohorts in siteCohorts) {
                         if (speciesCohorts.Species == targetSpecies) {
                             foreach (var cohort in speciesCohorts) {
                                 if (cohort.Data.Age == age) {
                                     //ModelCore.UI.WriteLine($"Actually transferring: {transfer}");
                                     cohort.ChangeBiomass(transfer);
+                                    found = true;
                                 }
                             }
                         }
+                    }
+                    if (!found) {
+                        throw new Exception($"No cohort found for transfer: Species={targetSpecies.Name}, Age={age}, Site=({site.Location.Row},{site.Location.Column})");
                     }
                 }
             }
