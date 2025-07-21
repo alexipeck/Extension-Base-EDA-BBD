@@ -8,6 +8,7 @@ using Landis.SpatialModeling;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Microsoft.CSharp;
 
 namespace Landis.Extension.EDA.BBD
 {
@@ -120,12 +121,12 @@ namespace Landis.Extension.EDA.BBD
             if(!reinitialized)
                 InitializePhase2();
 
-            int eventCount = 0;
+            //int eventCount = 0;
 
             //asdf;
             foreach (ActiveSite site in ModelCore.Landscape) {
                 var siteCohorts = SiteVars.Cohorts[site];
-                var biomassTransfer = new Dictionary<(ISpecies species, int age), int>();
+                var biomassTransfer = new Dictionary<(ISpecies species, ushort age), int>();
                 foreach (var speciesCohorts in siteCohorts) {
                     //if (speciesCohorts.Species.Name == "Acermacr" || speciesCohorts.Species.Name == "Aesccali" || speciesCohorts.Species.Name == "Arbumenz" || speciesCohorts.Species.Name == "Pseumenz") {
                     //}
@@ -160,9 +161,7 @@ namespace Landis.Extension.EDA.BBD
                         }
                     }
                 }
-                // Directly index Queragri cohorts by age for transfer
                 foreach (var entry in biomassTransfer) {
-                    
                     var (targetSpecies, age) = entry.Key;
                     int transfer = entry.Value;
                     /* var speciesCohorts = siteCohorts[targetSpecies];
@@ -185,10 +184,20 @@ namespace Landis.Extension.EDA.BBD
                         }
                     }
                     if (!found) {
-                        throw new Exception($"No cohort found for transfer: Species={targetSpecies.Name}, Age={age}, Site=({site.Location.Row},{site.Location.Column})");
+                        //NOTE: Will not be required after we switch from NECN-Succession to ForCS-Succession
+                        //Continuing to test with NECN-Succession will pose a problem,
+                        //but I can assume 20-80 leaf to wood biomass for the sake of it 
+                        System.Dynamic.ExpandoObject woodLeafBiomasses = new System.Dynamic.ExpandoObject();
+                        dynamic tempObject = woodLeafBiomasses;
+                        tempObject.WoodBiomass = transfer * 0.8;
+                        tempObject.LeafBiomass = transfer * 0.2;
+                        siteCohorts.AddNewCohort(targetSpecies, age, transfer, woodLeafBiomasses);
+                        //throw new Exception($"No cohort found for transfer: Species={targetSpecies.Name}, Age={age}, Site=({site.Location.Row},{site.Location.Column})");
                     }
                 }
             }
+            // Directly index Queragri cohorts by age for transfer
+            
 
             /* int agentIndex = 0;
             foreach(IAgent activeAgent in manyAgentParameters)
