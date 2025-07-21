@@ -125,12 +125,9 @@ namespace Landis.Extension.EDA.BBD
             //asdf;
             foreach (ActiveSite site in ModelCore.Landscape) {
                 var siteCohorts = SiteVars.Cohorts[site];
-                var biomassTransfer = new Dictionary<(string species, int age), int>();
+                var biomassTransfer = new Dictionary<(ISpecies species, int age), int>();
                 foreach (var speciesCohorts in siteCohorts) {
                     //if (speciesCohorts.Species.Name == "Acermacr" || speciesCohorts.Species.Name == "Aesccali" || speciesCohorts.Species.Name == "Arbumenz" || speciesCohorts.Species.Name == "Pseumenz") {
-                    if (speciesCohorts.Species.Name != "Umbecali" && speciesCohorts.Species.Name != "Queragri") {
-                        ModelCore.UI.WriteLine(speciesCohorts.Species.Name);
-                    }
                     //}
                     //Umbecali
                     //Queragri
@@ -142,25 +139,43 @@ namespace Landis.Extension.EDA.BBD
                         //ModelCore.UI.WriteLine($"{site.Location.Row}, {site.Location.Column}, {speciesCohorts.Species.Name}, {cohort.Data.Age}, {cohort.Data.Biomass}");
                         //cohort.ChangeBiomass(2);
                         //cohort.ChangeBiomass(-1);
-                        if (speciesCohorts.Species.Name == "Umbecali" || speciesCohorts.Species.Name == "Queragri" || speciesCohorts.Species.Name == "Acermacr" || speciesCohorts.Species.Name == "Aesccali") {
-                            ModelCore.UI.WriteLine(
-                                $"Site: ({site.Location.Row},{site.Location.Column}), Species: {speciesCohorts.Species.Name}, Age: {cohort.Data.Age}, Biomass: {cohort.Data.Biomass}, Species: {speciesCohorts.Species.Name}");
-                            
+                        //ModelCore.UI.WriteLine($"{ModelCore.CurrentTime}");
+                        //if (ModelCore.CurrentTime > 1) {
+                        if (site.Location.Row == 52 && site.Location.Column == 9) {
+                            if (speciesCohorts.Species.Name == "Umbecali" || speciesCohorts.Species.Name == "Queragri" || speciesCohorts.Species.Name == "Acermacr" || speciesCohorts.Species.Name == "Aesccali") {
+                                ModelCore.UI.WriteLine(
+                                    $"Site: ({site.Location.Row},{site.Location.Column}), Species: {speciesCohorts.Species.Name}, Age: {cohort.Data.Age}, Biomass: {cohort.Data.Biomass}");
+                            }
                         }
+                        //}
                         if (speciesCohorts.Species.Name == "Umbecali") {
                             int transfer = (int)(cohort.Data.Biomass * 0.3);
                             if (transfer > 0) {
+                                //ModelCore.UI.WriteLine($"Transfer: {transfer}");
+                                //ModelCore.UI.WriteLine($"Transfer: {-transfer}");
                                 cohort.ChangeBiomass(-transfer);
-                                biomassTransfer[("Queragri", cohort.Data.Age)] = transfer;
+                                //ModelCore.UI.WriteLine($"Transfer: {cohort.Data.Biomass}");
+                                biomassTransfer[(GetSpeciesByName("Queragri"), cohort.Data.Age)] = transfer;
                             }
                         }
                     }
                 }
-                if (biomassTransfer.Count > 0) {
+                // Directly index Queragri cohorts by age for transfer
+                foreach (var entry in biomassTransfer) {
+                    var (targetSpecies, age) = entry.Key;
+                    int transfer = entry.Value;
+                    /* var speciesCohorts = siteCohorts[targetSpecies];
+                    foreach (var cohort in speciesCohorts) {
+                        if (cohort.Data.Age == age) {
+                            //ModelCore.UI.WriteLine($"Actually transferring: {transfer}");
+                            cohort.ChangeBiomass(transfer);
+                        }
+                    } */
                     foreach (var speciesCohorts in siteCohorts) {
-                        if (speciesCohorts.Species.Name == "Queragri") {
+                        if (speciesCohorts.Species == targetSpecies) {
                             foreach (var cohort in speciesCohorts) {
-                                if (biomassTransfer.TryGetValue(("Queragri", cohort.Data.Age), out int transfer)) {
+                                if (cohort.Data.Age == age) {
+                                    //ModelCore.UI.WriteLine($"Actually transferring: {transfer}");
                                     cohort.ChangeBiomass(transfer);
                                 }
                             }
@@ -261,5 +276,12 @@ namespace Landis.Extension.EDA.BBD
             EventLog.WriteToFile();
         }
 
+        // Helper method to get ISpecies by name
+        private ISpecies GetSpeciesByName(string name) {
+            foreach (var species in ModelCore.Species) {
+                if (species.Name == name) return species;
+            }
+            return null;
+        }
     }
 }
