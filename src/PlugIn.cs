@@ -123,6 +123,22 @@ namespace Landis.Extension.EDA.BBD
 
             int eventCount = 0;
 
+            //asdf;
+            /* foreach (ActiveSite site in ModelCore.Landscape)
+            {
+                var siteCohorts = SiteVars.Cohorts[site];
+                foreach (var speciesCohorts in siteCohorts)
+                {
+                    foreach (var cohort in speciesCohorts)
+                    {
+                        if (cohort.Data.Biomass != 1000) {
+                            ModelCore.UI.WriteLine(
+                                $"Site: ({site.Location.Row},{site.Location.Column}), Species: {speciesCohorts.Species.Name}, Age: {cohort.Data.Age}, Biomass: {cohort.Data.Biomass}");
+                        }
+                    }
+                }
+            } */
+
             int agentIndex = 0;
             foreach(IAgent activeAgent in manyAgentParameters)
             {

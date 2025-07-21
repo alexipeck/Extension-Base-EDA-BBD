@@ -11,7 +11,8 @@ using System.Data;
 namespace Landis.Extension.EDA.BBD
 {
 
-    public enum SHImode { max, mean };  //maybe add something new here, like weighted by biomass, or mean for each cohort?
+    //Site Host Index
+    public enum SHImode { max, mean };  //TODO: maybe add something new here, like weighted by biomass, or mean for each cohort?
     public enum DispersalType { STATIC, DYNAMIC };
     public enum DispersalTemplate { PowerLaw, NegExp };
 

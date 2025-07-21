@@ -236,6 +236,7 @@ namespace Landis.Extension.EDA.BBD
 
                 //update status of cell based on updated probabilities
                 // SUSCEPTIBLE --->> INFECTED
+                //asdf;
                 if (SiteVars.InfStatus[site][agentIndex] == 0 && SiteVars.PInfected[site][agentIndex] >= myRand)  //if site is Susceptible (S) 
                 {
                     //update state of current site from S to I
@@ -333,9 +334,11 @@ namespace Landis.Extension.EDA.BBD
             siteMortSppKilled = 0;
 
             currentSite = site;
-
-            SiteVars.Cohorts[site].ReduceOrKillCohorts(this);
-
+            int reducedValue = SiteVars.Cohorts[site].ReduceOrKillCohorts(this);
+            if (reducedValue > 0) {
+                //PlugIn.ModelCore.UI.WriteLine("ReduceOrKillCohorts returned: {0}", reducedValue);
+            }
+            
             int[] cohortsKilled = new int[3];
 
             cohortsKilled[0] = siteCohortsKilled;
@@ -413,7 +416,7 @@ namespace Landis.Extension.EDA.BBD
         }
 
         //define func to calculate Force of Infection (FOI) for a given agent and site
-        //force of infection depends on the dispersal kernel, weather index, SHI of neighboring sites and itself, pInfected & pDiseased of neighboring sites         
+        //force of infection depends on the dispersal kernel, weather index, SHI of neighboring sites and itself, pInfected & pDiseased of neighboring sites
         double ComputeSiteFOI(IAgent agent, Site targetSite, double beta, int agentIndex)
         {
             int maxRadius = agent.DispersalMaxDist;
