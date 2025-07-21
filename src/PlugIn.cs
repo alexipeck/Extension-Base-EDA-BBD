@@ -123,29 +123,53 @@ namespace Landis.Extension.EDA.BBD
             int eventCount = 0;
 
             //asdf;
-            bool firstCohortInLandscape = true;
-            foreach (ActiveSite site in ModelCore.Landscape)
-            {
+            foreach (ActiveSite site in ModelCore.Landscape) {
                 var siteCohorts = SiteVars.Cohorts[site];
-                foreach (var speciesCohorts in siteCohorts)
-                {
-                    foreach (var cohort in speciesCohorts)
-                    {if (firstCohortInLandscape) {
+                var biomassTransfer = new Dictionary<(string species, int age), int>();
+                foreach (var speciesCohorts in siteCohorts) {
+                    //if (speciesCohorts.Species.Name == "Acermacr" || speciesCohorts.Species.Name == "Aesccali" || speciesCohorts.Species.Name == "Arbumenz" || speciesCohorts.Species.Name == "Pseumenz") {
+                    if (speciesCohorts.Species.Name != "Umbecali" && speciesCohorts.Species.Name != "Queragri") {
+                        ModelCore.UI.WriteLine(speciesCohorts.Species.Name);
+                    }
+                    //}
+                    //Umbecali
+                    //Queragri
+                    foreach (var cohort in speciesCohorts) {
+                        /* ModelCore.UI.WriteLine(
+                                $"Site: ({site.Location.Row},{site.Location.Column}), Species: {speciesCohorts.Species.Name}, Age: {cohort.Data.Age}, Biomass: {cohort.Data.Biomass}, Species: {speciesCohorts.Species.Name}"); */
+
+                        //cohort.ChangeBiomass(cohort.Data.Biomass);
+                        //ModelCore.UI.WriteLine($"{site.Location.Row}, {site.Location.Column}, {speciesCohorts.Species.Name}, {cohort.Data.Age}, {cohort.Data.Biomass}");
+                        //cohort.ChangeBiomass(2);
+                        //cohort.ChangeBiomass(-1);
+                        if (speciesCohorts.Species.Name == "Umbecali" || speciesCohorts.Species.Name == "Queragri" || speciesCohorts.Species.Name == "Acermacr" || speciesCohorts.Species.Name == "Aesccali") {
                             ModelCore.UI.WriteLine(
-                                $"Site: ({site.Location.Row},{site.Location.Column}), Species: {speciesCohorts.Species.Name}, Age: {cohort.Data.Age}, Biomass: {cohort.Data.Biomass}");
+                                $"Site: ({site.Location.Row},{site.Location.Column}), Species: {speciesCohorts.Species.Name}, Age: {cohort.Data.Age}, Biomass: {cohort.Data.Biomass}, Species: {speciesCohorts.Species.Name}");
+                            
                         }
-                        cohort.ChangeBiomass(2);
-                        cohort.ChangeBiomass(-1);
-                        if (firstCohortInLandscape) {
-                            ModelCore.UI.WriteLine(
-                                $"Site: ({site.Location.Row},{site.Location.Column}), Species: {speciesCohorts.Species.Name}, Age: {cohort.Data.Age}, Biomass: {cohort.Data.Biomass}");
-                            firstCohortInLandscape = false;
+                        if (speciesCohorts.Species.Name == "Umbecali") {
+                            int transfer = (int)(cohort.Data.Biomass * 0.3);
+                            if (transfer > 0) {
+                                cohort.ChangeBiomass(-transfer);
+                                biomassTransfer[("Queragri", cohort.Data.Age)] = transfer;
+                            }
+                        }
+                    }
+                }
+                if (biomassTransfer.Count > 0) {
+                    foreach (var speciesCohorts in siteCohorts) {
+                        if (speciesCohorts.Species.Name == "Queragri") {
+                            foreach (var cohort in speciesCohorts) {
+                                if (biomassTransfer.TryGetValue(("Queragri", cohort.Data.Age), out int transfer)) {
+                                    cohort.ChangeBiomass(transfer);
+                                }
+                            }
                         }
                     }
                 }
             }
 
-            int agentIndex = 0;
+            /* int agentIndex = 0;
             foreach(IAgent activeAgent in manyAgentParameters)
             {
 
@@ -210,12 +234,12 @@ namespace Landis.Extension.EDA.BBD
                 }                    
                 else if (activeAgent.DispersalType == DispersalType.DYNAMIC)
                 {
-                    /*****************TODO*******************/
+                    //TODO
                     Console.WriteLine("Dynamic dispersal type has not been implemented yet!!");
                 }
 
                 agentIndex++;
-            }
+            } */
         }
 
         private void LogEvent(int currentTime,

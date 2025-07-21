@@ -336,6 +336,7 @@ namespace Landis.Extension.EDA.BBD
             currentSite = site;
             int reducedValue = SiteVars.Cohorts[site].ReduceOrKillCohorts(this);
             if (reducedValue > 0) {
+                //asdf;
                 //PlugIn.ModelCore.UI.WriteLine("ReduceOrKillCohorts returned: {0}", reducedValue);
             }
             
