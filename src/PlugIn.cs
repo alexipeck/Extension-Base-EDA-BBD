@@ -85,7 +85,6 @@ namespace Landis.Extension.EDA.BBD
 
             //Initialize non-library climate data
             //loadedClimateData = ClimateData.ReadClimateData(manyAgentParameters);
-
             foreach (IAgent activeAgent in manyAgentParameters)
             {
                 if (activeAgent == null)
@@ -124,20 +123,27 @@ namespace Landis.Extension.EDA.BBD
             int eventCount = 0;
 
             //asdf;
-            /* foreach (ActiveSite site in ModelCore.Landscape)
+            bool firstCohortInLandscape = true;
+            foreach (ActiveSite site in ModelCore.Landscape)
             {
                 var siteCohorts = SiteVars.Cohorts[site];
                 foreach (var speciesCohorts in siteCohorts)
                 {
                     foreach (var cohort in speciesCohorts)
-                    {
-                        if (cohort.Data.Biomass != 1000) {
+                    {if (firstCohortInLandscape) {
                             ModelCore.UI.WriteLine(
                                 $"Site: ({site.Location.Row},{site.Location.Column}), Species: {speciesCohorts.Species.Name}, Age: {cohort.Data.Age}, Biomass: {cohort.Data.Biomass}");
                         }
+                        cohort.ChangeBiomass(2);
+                        cohort.ChangeBiomass(-1);
+                        if (firstCohortInLandscape) {
+                            ModelCore.UI.WriteLine(
+                                $"Site: ({site.Location.Row},{site.Location.Column}), Species: {speciesCohorts.Species.Name}, Age: {cohort.Data.Age}, Biomass: {cohort.Data.Biomass}");
+                            firstCohortInLandscape = false;
+                        }
                     }
                 }
-            } */
+            }
 
             int agentIndex = 0;
             foreach(IAgent activeAgent in manyAgentParameters)

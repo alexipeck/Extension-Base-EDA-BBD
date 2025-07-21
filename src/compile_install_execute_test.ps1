@@ -8,6 +8,10 @@ $LandisExtensionsDir = "C:\Program Files\LANDIS-II-v8\extensions"
 
 cd $ProjectDir\src\
 dotnet build
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "dotnet build failed. Exiting script."
+    exit $LASTEXITCODE
+}
 
 Copy-Item -Path "$ProjectDir\src\bin\Debug\netstandard2.0\Landis.Extension.EDA-v3-BBD.dll" -Destination "$LandisExtensionsDir\" -Force
 Copy-Item -Path "$ProjectDir\src\bin\Debug\netstandard2.0\Landis.Extension.EDA-v3-BBD.pdb" -Destination "$LandisExtensionsDir\" -Force
