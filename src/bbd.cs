@@ -1,4 +1,5 @@
 using Landis.Core;
+using Landis.Library.UniversalCohorts;
 using System.Collections.Generic;
 
 namespace Landis.Extension.EDA.BBD
@@ -9,9 +10,9 @@ namespace Landis.Extension.EDA.BBD
         {
             var siteCohorts = SiteVars.Cohorts[site];
             var biomassTransfer = new Dictionary<(ISpecies species, ushort age), int>();
-            foreach (var speciesCohorts in siteCohorts)
+            foreach (ISpeciesCohorts speciesCohorts in siteCohorts)
             {
-                foreach (var cohort in speciesCohorts)
+                foreach (ICohort cohort in speciesCohorts)
                 {
                     if (site.Location.Row == 52 && site.Location.Column == 9)
                     {
@@ -69,7 +70,7 @@ namespace Landis.Extension.EDA.BBD
             foreach (var species in modelCore.Species) {
                 if (species.Name == name) return species;
             }
-            return null;
+            throw new KeyNotFoundException($"Species with name '{name}' not found.");
         }
     }
 } 
