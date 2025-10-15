@@ -78,8 +78,7 @@ namespace Landis.Extension.EDA
                         {
                             dispersal_probability.Add(dist, prob);
                             dispersal_prob_count.Add(dist, 1);
-                        }                            
-
+                        }
                         if (x == y || x == 0 || y == 0)
                         {
                             total_p += 4 * prob;

@@ -55,17 +55,18 @@ namespace Landis.Extension.EDA
                         numValidSpp++;
                         speciesHostValue = 0.0;
 
-                        if (ageOldestCohort >= sppParms.LowHostAge)
+                        if (ageOldestCohort >= sppParms.LowHostAge) {
                             //speciesHostValue = 0.33; VALUES ARE READ IN FROM THE EDA Spp Param Table
                             speciesHostValue = sppParms.LowHostScore;
-
-                        if (ageOldestCohort >= sppParms.MediumHostAge)
+                        }
+                        else if (ageOldestCohort >= sppParms.MediumHostAge) {
                             //speciesHostValue = 0.66; VALUES ARE READ IN FROM THE EDA Spp Param Table
                             speciesHostValue = sppParms.MediumHostScore;
-
-                        if (ageOldestCohort >= sppParms.HighHostAge)
+                        }
+                        else if (ageOldestCohort >= sppParms.HighHostAge) {
                             //speciesHostValue = 1.0; VALUES ARE READ IN FROM THE EDA Spp Param Table
                             speciesHostValue = sppParms.HighHostScore;
+                        }
 
 
                         sumValue += speciesHostValue;

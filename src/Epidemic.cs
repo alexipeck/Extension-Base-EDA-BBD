@@ -442,9 +442,9 @@ namespace Landis.Extension.EDA
 
             int numCellRadius = (int)(maxRadius / CellLength);
 
-            for (int row = (numCellRadius * -1); row <= numCellRadius; row++)
+            for (int row = -numCellRadius; row <= numCellRadius; row++)
             {
-                for (int col = (numCellRadius * -1); col <= numCellRadius; col++)
+                for (int col = -numCellRadius; col <= numCellRadius; col++)
                 {
 
                     if (row == 0 && col == 0) continue; //we do not want to consider source cells overlapping with target (current) cell
