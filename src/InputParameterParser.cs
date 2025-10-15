@@ -7,7 +7,7 @@ using Landis.Utilities;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Landis.Extension.EDA
+namespace Landis.Extension.EDA.BBD
 {
     /// <summary>
     /// A parser that reads the extension parameters from text input.
@@ -76,6 +76,39 @@ namespace Landis.Extension.EDA
             InputVar<string> logFile = new InputVar<string>("LogFile");
             ReadVar(logFile);
             parameters.LogFileName = logFile.Value;
+
+            // - species order -
+            InputVar<string> speciesOrderFile = new InputVar<string>("SpeciesOrder");
+            ReadVar(speciesOrderFile);
+            string speciesOrderPath = speciesOrderFile.Value;
+            var speciesOrderList = new List<string>();
+            var speciesDataset = PlugIn.ModelCore.Species;
+            int lineNum = 0;
+            foreach (var line in System.IO.File.ReadLines(speciesOrderPath))
+            {
+                lineNum++;
+                var trimmed = line.Trim();
+                if (string.IsNullOrEmpty(trimmed)) continue;
+                var found = false;
+                foreach (var species in speciesDataset)
+                {
+                    if (species.Name == trimmed)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    throw new InputValueException(trimmed, $"Species '{trimmed}' on line {lineNum} of SpeciesOrder file does not exist in scenario species list.");
+                }
+                speciesOrderList.Add(trimmed);
+            }
+            if (speciesOrderList.Count == 0)
+            {
+                throw new InputValueException(speciesOrderPath, "SpeciesOrder file must contain at least one valid species name.");
+            }
+            parameters.SpeciesOrder = speciesOrderList;
 
             //----------------------------------------------------------
             // Last, read in Agent File names,

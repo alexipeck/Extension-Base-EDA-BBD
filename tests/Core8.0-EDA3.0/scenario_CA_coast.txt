@@ -29,7 +29,7 @@ CellLength  100 << meters, 100 x 100 m = 1 hectare
 >> Disturbance Extensions   Initialization File
 
 >> ----------------------   -------------------
-   "EDA"	            EDA-input.txt
+   "EDA.BBD"	            EDA-input.txt
 
 >>   DisturbancesRandomOrder  yes  << optional parameter; default = no
 

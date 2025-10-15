@@ -1,4 +1,4 @@
-LandisData "EDA"
+LandisData "EDA.BBD"
 
 Timestep	1
 
@@ -7,6 +7,8 @@ MapNames	eda/{agentName}-{timestep}.tif
 MORTMapNames     eda/{agentName}-MORT-{timestep}.tif
 
 LogFile		eda/eda-log.csv
+
+SpeciesOrder	species-order.txt
 
 EDAInputFiles	P_ramorum.txt	
 

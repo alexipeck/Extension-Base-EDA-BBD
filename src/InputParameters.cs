@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 using Landis.Utilities;
-namespace Landis.Extension.EDA
+namespace Landis.Extension.EDA.BBD
 {
     /// <summary>
     /// Parameters for the extension.
@@ -35,10 +35,15 @@ namespace Landis.Extension.EDA
         /// List of Agent Files
         /// </summary>
         IEnumerable<IAgent> ManyAgentParameters{get;set;}
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// List of species names in the order specified by the SpeciesOrder file.
+        /// </summary>
+        List<string> SpeciesOrder { get; set; }
     }
 }
 
-namespace Landis.Extension.EDA
+namespace Landis.Extension.EDA.BBD
 {
     /// <summary>
     /// Parameters for the plug-in.
@@ -51,6 +56,7 @@ namespace Landis.Extension.EDA
         private string mortMapNames;
         private string logFileName;
         private IEnumerable<IAgent> manyAgentParameters;
+        private List<string> speciesOrder;
 
         //---------------------------------------------------------------------
         /// <summary>
@@ -125,6 +131,19 @@ namespace Landis.Extension.EDA
             }
             set {
                 manyAgentParameters = value;
+            }
+        }
+        //---------------------------------------------------------------------
+        /// <summary>
+        /// List of species names in the order specified by the SpeciesOrder file.
+        /// </summary>
+        public List<string> SpeciesOrder
+        {
+            get {
+                return speciesOrder;
+            }
+            set {
+                speciesOrder = value;
             }
         }
 

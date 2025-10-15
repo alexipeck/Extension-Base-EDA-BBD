@@ -10,7 +10,7 @@ using Landis.Core;
 using System.Linq;
 using Landis.SpatialModeling;
 
-namespace Landis.Extension.EDA
+namespace Landis.Extension.EDA.BBD
 {
     /// <summary>
     /// The definition of a reclass map.

@@ -1,9 +1,9 @@
 LandisData   Extension
 
-Name         "EDA"
+Name         "EDA.BBD"
 Version      "3.0"
-Type         disturbance:EDA
-Assembly     Landis.Extension.EDA-v3
-Class        Landis.Extension.EDA.PlugIn
-Description  "Epidemiological disturbance agents"
+Type         disturbance:EDA.BBD
+Assembly     Landis.Extension.EDA-v3-BBD
+Class        Landis.Extension.EDA.BBD.PlugIn
+Description  "Epidemiological disturbance agents modified for Beech Bark Disease"
 CoreVersion  8.0
