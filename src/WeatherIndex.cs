@@ -160,7 +160,7 @@ namespace Landis.Extension.EDA
                 }
                 else
                 {
-                    string mesg = string.Format("Annual Weather Index function is {1}; expected 'sum' or 'mean'.", agent.AnnualWeatherIndex.Function);
+                    string mesg = string.Format("Annual Weather Index function is {0}; expected 'sum' or 'mean'.", agent.AnnualWeatherIndex.Function);
                     throw new System.ApplicationException(mesg);
                 }
 
