@@ -205,6 +205,7 @@ namespace Landis.Extension.BaseEDA
                 SiteVars.FOI[site] = ComputeSiteFOI(agent, site, normalizedWI, agentIndex);
             });
 
+            Log.Info(LogType.General, $"total: {totalSitesInfected}");
             PlugIn.ModelCore.UI.WriteLine("   Computing infection status for each cell...");
             foreach (ActiveSite site in PlugIn.ModelCore.Landscape)
             {
@@ -241,6 +242,9 @@ namespace Landis.Extension.BaseEDA
                     //update state of current site from S to I
                     SiteVars.InfStatus[site][agentIndex] += 1;
                     totalSitesInfected++;
+                    
+                    string coordinates = $"({site.Location.Row}, {site.Location.Column})";
+                    Log.Info(LogType.Infection, $"location: {coordinates}");
                 }
                 // INFECTED --->> DISEASED
                 else if (SiteVars.InfStatus[site][agentIndex] == 1)
