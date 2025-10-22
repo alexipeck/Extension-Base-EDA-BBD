@@ -24,6 +24,17 @@
     <Company>LANDIS-II Foundation</Company>
   </PropertyGroup>
 
+ 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'"> 
+    <OutputPath>..\bin\Debug\</OutputPath> 
+    <DebugType>full</DebugType> 
+    <DebugSymbols>false</DebugSymbols> 
+  </PropertyGroup>
+   
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'"> 
+    <OutputPath>..\bin\Release\</OutputPath> 
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Landis.Core" Version="2.0.0" />
     <PackageReference Include="Landis.Core.Implementation" Version="2.0.0" />

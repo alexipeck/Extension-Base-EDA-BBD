@@ -186,7 +186,6 @@ namespace Landis.Extension.BaseEDA
                 double transformValue = 0;
                 if (ecoregion.Active)
                 {
-                    // Calculate Derived Climate Variables
                     Dictionary<string, double[]> dailyDerivedClimate = DerivedClimateVariable.CalculateDerivedClimateVariables(agent, ecoregion);
                     int numDailyRecords = dailyDerivedClimate[dailyDerivedClimate.Keys.First()].Length;
                     double[] blankRecords = new double[numDailyRecords];
@@ -220,33 +219,44 @@ namespace Landis.Extension.BaseEDA
                                 double[] variableArray;
                                 if (climVar.SourceName.Equals("Library", StringComparison.OrdinalIgnoreCase))
                                 {
-                                    AnnualClimate_Daily AnnualWeather = Climate.Future_DailyData[Climate.Future_DailyData.Keys.Min()][ecoregion.Index];
-                                    int minFutureYear = Climate.Future_DailyData.Keys.Min();
+                                    AnnualClimate_Daily annualWeather = null;
                                     int year = PlugIn.ModelCore.CurrentTime;
                                     if (year < 1)
                                     {
-                                        AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
-                                    }
-                                    else
-                                    {
-                                        if (year < minFutureYear)
+                                        if (Climate.Spinup_DailyData != null && Climate.Spinup_DailyData.ContainsKey(year))
                                         {
-                                            year = minFutureYear + (year - 1);
+                                            var spinupArr = Climate.Spinup_DailyData[year];
+                                            if (spinupArr != null && ecoregion.Index < spinupArr.Length)
+                                                annualWeather = spinupArr[ecoregion.Index];
                                         }
-                                        if (year != Climate.Future_DailyData.Keys.Min())
+                                    }
+                                    else if (Climate.Future_DailyData != null && Climate.Future_DailyData.Count > 0)
+                                    {
+                                        int minFutureYear = Climate.Future_DailyData.Keys.Min();
+                                        int selectedYear = year;
+                                        if (selectedYear < minFutureYear)
+                                            selectedYear = minFutureYear + (selectedYear - 1);
+                                        if (Climate.Future_DailyData.ContainsKey(selectedYear))
                                         {
-                                            AnnualWeather = Climate.Future_DailyData[year][ecoregion.Index];
+                                            var futureArr = Climate.Future_DailyData[selectedYear];
+                                            if (futureArr != null && ecoregion.Index < futureArr.Length)
+                                                annualWeather = futureArr[ecoregion.Index];
                                         }
                                     }
 
-
-                                    if (climVar.ClimateLibVariable.Equals("DailyTemp", StringComparison.OrdinalIgnoreCase))
+                                    if (annualWeather == null)
                                     {
-                                        variableArray = AnnualWeather.DailyTemp;
+                                        PlugIn.ModelCore.UI.WriteLine("   Warning: Climate library data not available. Skipping weather var: " + climVar.Name);
+                                        variableArray = new double[numDailyRecords];
+                                        for (int ii = 0; ii < numDailyRecords; ii++) variableArray[ii] = 1;
+                                    }
+                                    else if (climVar.ClimateLibVariable.Equals("DailyTemp", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        variableArray = annualWeather.DailyTemp;
                                     }
                                     else if (climVar.ClimateLibVariable.Equals("DailyPrecip", StringComparison.OrdinalIgnoreCase))
                                     {
-                                        variableArray = AnnualWeather.DailyPrecip;
+                                        variableArray = annualWeather.DailyPrecip;
                                     }
                                     else
                                     {
@@ -271,8 +281,16 @@ namespace Landis.Extension.BaseEDA
                         }
                         if(!varMatch)
                         {
-                            string mesg = string.Format("WeatherIndex variable {1} is not a ClimateVariable or a DerivedClimateVariable.",weatherVar);
-                            throw new System.ApplicationException(mesg);
+                            bool noClimateData = (Climate.Spinup_DailyData == null) && (Climate.Future_DailyData == null || Climate.Future_DailyData.Count == 0);
+                            if (noClimateData)
+                            {
+                                PlugIn.ModelCore.UI.WriteLine("   Warning: WeatherIndex variable not found; skipping: " + weatherVar);
+                            }
+                            else
+                            {
+                                string mesg = string.Format("WeatherIndex variable {0} is not a ClimateVariable or a DerivedClimateVariable.",weatherVar);
+                                throw new System.ApplicationException(mesg);
+                            }
                         }
 
                     }
@@ -311,7 +329,7 @@ namespace Landis.Extension.BaseEDA
                     }
                     else
                     {
-                        string mesg = string.Format("Annual Weather Index function is {1}; expected 'sum' or 'mean'.", agent.AnnualWeatherIndex.Function);
+                        string mesg = string.Format("Annual Weather Index function is {0}; expected 'sum' or 'mean'.", agent.AnnualWeatherIndex.Function);
                         throw new System.ApplicationException(mesg);
                     }
                 }
@@ -349,22 +367,26 @@ namespace Landis.Extension.BaseEDA
             else
             {
                 int dataIndex = 0;
-                foreach (KeyValuePair<string, ExternalClimateYear> climateYear in PlugIn.loadedClimateData.ExternalData)
+                if (PlugIn.loadedClimateData != null && PlugIn.loadedClimateData.ExternalData != null && PlugIn.loadedClimateData.ExternalData.Count > 0)
                 {
-                    List<int> climateYearArray = climateYear.Value.YearClimate.Keys.ToList();
-                    if (dataIndex == 0)
+                    foreach (KeyValuePair<string, ExternalClimateYear> climateYear in PlugIn.loadedClimateData.ExternalData)
                     {
-                        yearList = climateYearArray;
-                    }
-                    else
-                    {
-                        foreach(int year in climateYearArray)
+                        List<int> climateYearArray = climateYear.Value.YearClimate.Keys.ToList();
+                        if (dataIndex == 0)
                         {
-                            if(!yearList.Contains(year))
+                            yearList = climateYearArray;
+                        }
+                        else
+                        {
+                            foreach (int year in climateYearArray)
                             {
-                                yearList.Add(year);
+                                if (!yearList.Contains(year))
+                                {
+                                    yearList.Add(year);
+                                }
                             }
                         }
+                        dataIndex++;
                     }
                 }
             }
@@ -411,14 +433,26 @@ namespace Landis.Extension.BaseEDA
                                         double[] variableArray;
                                         if (climVar.SourceName.Equals("Library", StringComparison.OrdinalIgnoreCase))
                                         {
-                                            AnnualClimate_Daily AnnualWeather = Climate.Spinup_DailyData[year][ecoregion.Index];
-                                            if (climVar.ClimateLibVariable.Equals("DailyTemp", StringComparison.OrdinalIgnoreCase))
+                                            AnnualClimate_Daily annualWeather = null;
+                                            if (Climate.Spinup_DailyData != null && Climate.Spinup_DailyData.ContainsKey(year))
                                             {
-                                                variableArray = AnnualWeather.DailyTemp;
+                                                var spinupArr = Climate.Spinup_DailyData[year];
+                                                if (spinupArr != null && ecoregion.Index < spinupArr.Length)
+                                                    annualWeather = spinupArr[ecoregion.Index];
+                                            }
+                                    if (annualWeather == null)
+                                    {
+                                        PlugIn.ModelCore.UI.WriteLine("   Warning: Climate library data not available. Skipping weather var: " + climVar.Name);
+                                        variableArray = new double[numDailyRecords];
+                                        for (int ii = 0; ii < numDailyRecords; ii++) variableArray[ii] = 1;
+                                    }
+                                            else if (climVar.ClimateLibVariable.Equals("DailyTemp", StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                variableArray = annualWeather.DailyTemp;
                                             }
                                             else if (climVar.ClimateLibVariable.Equals("DailyPrecip", StringComparison.OrdinalIgnoreCase))
                                             {
-                                                variableArray = AnnualWeather.DailyPrecip;
+                                                variableArray = annualWeather.DailyPrecip;
                                             }
                                             else
                                             {
@@ -443,8 +477,16 @@ namespace Landis.Extension.BaseEDA
                                 }
                                 if (!varMatch)
                                 {
-                                    string mesg = string.Format("WeatherIndex variable {1} is not a ClimateVariable or a DerivedClimateVariable.", weatherVar);
-                                    throw new System.ApplicationException(mesg);
+                                    bool noClimateData = (Climate.Spinup_DailyData == null);
+                                    if (noClimateData)
+                                    {
+                                        PlugIn.ModelCore.UI.WriteLine("   Warning: WeatherIndex variable not found; skipping: " + weatherVar);
+                                    }
+                                    else
+                                    {
+                                        string mesg = string.Format("WeatherIndex variable {0} is not a ClimateVariable or a DerivedClimateVariable.", weatherVar);
+                                        throw new System.ApplicationException(mesg);
+                                    }
                                 }
 
                             }
@@ -483,7 +525,7 @@ namespace Landis.Extension.BaseEDA
                             }
                             else
                             {
-                                string mesg = string.Format("Annual Weather Index function is {1}; expected 'sum' or 'mean'.", agent.AnnualWeatherIndex.Function);
+                                string mesg = string.Format("Annual Weather Index function is {0}; expected 'sum' or 'mean'.", agent.AnnualWeatherIndex.Function);
                                 throw new System.ApplicationException(mesg);
                             }
 

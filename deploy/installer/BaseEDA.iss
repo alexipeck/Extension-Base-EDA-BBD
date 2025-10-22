@@ -6,7 +6,7 @@
 #define AppURL "http://www.landis-ii.org/"
 
 ; Build directory
-#define BuildDir "..\..\src\bin\Debug\netstandard2.0"
+#define BuildDir "..\..\bin\release\netstandard2.0"
 
 ; LANDIS-II installation directories
 #define ExtDir "C:\Program Files\LANDIS-II-v7\extensions"
@@ -53,7 +53,7 @@ Source: {#BuildDir}\Landis.Extension.BaseEDA-v2.dll; DestDir: {#ExtDir}; Flags: 
 Source: {#BuildDir}\Landis.Library.AgeOnlyCohorts-v3.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall replacesameversion
 Source: {#BuildDir}\Landis.Library.Cohorts-v2.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall replacesameversion
 Source: {#BuildDir}\Landis.Library.Metadata-v2.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall replacesameversion
-Source: {#BuildDir}\Landis.Library.Climate-v3.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall replacesameversion
+Source: {#BuildDir}\Landis.Library.Climate-v4.3.dll; DestDir: {#ExtDir}; Flags: uninsneveruninstall replacesameversion
 
 
 ; Complete example for testing the extension
