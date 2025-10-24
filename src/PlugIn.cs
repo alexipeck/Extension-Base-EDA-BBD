@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 using System.Drawing;
-using Landis.Library.Cohorts;
 using Landis.Library.AgeOnlyCohorts;
 using System.IO;
 using System.Diagnostics;
@@ -77,6 +76,16 @@ namespace Landis.Extension.BaseEDA
         /// </summary>
         public override void Initialize()
         {
+            string[] pathsToEmpty = new string[] { "./images", "./data"};
+            foreach (string path in pathsToEmpty) {
+                if (System.IO.Directory.Exists(path)) {
+                    System.IO.DirectoryInfo directory = new System.IO.DirectoryInfo(path);
+                    foreach (System.IO.FileInfo file in directory.GetFiles("*", System.IO.SearchOption.AllDirectories)) {
+                        file.Delete();
+                    }
+                    Log.Info(LogType.General, $"Emptied folder: {path}");
+                }
+            }
             reinitialized = false;
 
             //initialize metadata
@@ -160,7 +169,6 @@ namespace Landis.Extension.BaseEDA
                 int landscapeSize = dims.Rows * dims.Columns;
                 InfectionStateDetection(ModelCore.Landscape.ActiveSites, landscapeX, landscapeSize);
             }
-
         }
 
         public new void InitializePhase2() 
@@ -199,8 +207,14 @@ namespace Landis.Extension.BaseEDA
                 {
                     ModelCore.UI.WriteLine("   Simulating spread of epidemic...");
                     Epidemic currentEpic = Epidemic.Simulate(activeAgent, ModelCore.CurrentTime, agentIndex);
+                    
                     if (currentEpic != null)
                     {
+                        var t = ModelCore.Landscape.AllSites.Select(site => {
+                            double foiValue = SiteVars.FOI[site];
+                            return double.IsNaN(foiValue) ? 0.0 : foiValue;
+                        }).ToArray();
+                        SerializeAsBincode($"./data/foi/{modelCore.CurrentTime}.bin", PlugIn.ModelCore.CurrentTime, t);
                         LogEvent(ModelCore.CurrentTime, currentEpic, activeAgent);
 
                         //----- Write Infection Status maps (SUSCEPTIBLE (0), INFECTED (cryptic-non symptomatic) (1), DISEASED (symptomatic) (2) --------
@@ -401,10 +415,10 @@ namespace Landis.Extension.BaseEDA
                 bool containsHealthySpecies = false;
                 bool containsInfectedSpecies = false;
                 foreach (ISpeciesCohorts speciesCohorts in SiteVars.Cohorts[site]) {
-                    if (hostSpecies.Contains(speciesCohorts.Species)) {
-                        containsHealthySpecies = true;
-                    } else if (vulnerableSpecies.Contains(speciesCohorts.Species) && (status == 1 || status == 2)) {
+                    if (hostSpecies.Contains(speciesCohorts.Species) && (status == 1 || status == 2)) {
                         containsInfectedSpecies = true;
+                    } else if (hostSpecies.Contains(speciesCohorts.Species)) {
+                        containsHealthySpecies = true;
                     }
                 }
                 int totalBiomass = healthyBiomass + infectedBiomass + ignoredBiomass;
@@ -430,8 +444,7 @@ namespace Landis.Extension.BaseEDA
                     Stopwatch outputStopwatch = new Stopwatch();
                     outputStopwatch.Start();
                     try {
-                        string outputPath = $"./data/infection/{modelCore.CurrentTime}.bin";
-                        SerializeAsBincode(outputPath, modelCore.CurrentTime, healthySitesList, infectedSitesList, ignoredSitesList, healthyBiomassTracker, infectedBiomassTracker, ignoredBiomassTracker);
+                        SerializeAsBincode($"./data/infection/{modelCore.CurrentTime}.bin", modelCore.CurrentTime, healthySitesList, infectedSitesList, ignoredSitesList, healthyBiomassTracker, infectedBiomassTracker, ignoredBiomassTracker);
                     }
                     catch (Exception ex) {
                         Log.Error(LogType.General, $"Debug bitmap generation failed: {ex.Message}");

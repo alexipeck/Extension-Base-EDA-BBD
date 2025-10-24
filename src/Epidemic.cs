@@ -7,6 +7,7 @@ using Landis.Library.AgeOnlyCohorts;
 using Landis.SpatialModeling;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Landis.Extension.BaseEDA
@@ -202,7 +203,7 @@ namespace Landis.Extension.BaseEDA
                 double normalizedWI = weatherIndex / agent.EcoWeatherIndexNormal[PlugIn.ModelCore.Ecoregion[site].Index];
 
                 //calculate force of infection for current site                
-                SiteVars.FOI[site] = ComputeSiteFOI(agent, site, normalizedWI, agentIndex);
+                SiteVars.FOI[site] = ComputeSiteFOI(agent, site, 1/* normalizedWI */, agentIndex);
             });
 
             Log.Info(LogType.General, $"total: {totalSitesInfected}");
@@ -244,7 +245,6 @@ namespace Landis.Extension.BaseEDA
                     totalSitesInfected++;
                     
                     string coordinates = $"({site.Location.Row}, {site.Location.Column})";
-                    Log.Info(LogType.Infection, $"location: {coordinates}");
                 }
                 // INFECTED --->> DISEASED
                 else if (SiteVars.InfStatus[site][agentIndex] == 1)
@@ -387,7 +387,7 @@ namespace Landis.Extension.BaseEDA
 
                 if (sppParms.MortSppFlag)
                     siteMortSppKilled++;
-
+                Log.MortalityCSV(PlugIn.ModelCore.CurrentTime, cohort.Species.Name, cohort.Age);
             }
 
             return killCohort;
@@ -430,7 +430,7 @@ namespace Landis.Extension.BaseEDA
             double cumSum = KernelLoop(targetSite, agentIndex);
 
             //calculate force of infection: beta * cumSum
-            double beta_t = beta * agent.TransmissionRate;   //beta_t = w(t) * beta_0
+            double beta_t = 1/* beta */ * agent.TransmissionRate;   //beta_t = w(t) * beta_0
             double forceOfInf = beta_t * cumSum;
 
             return forceOfInf;
@@ -732,8 +732,9 @@ namespace Landis.Extension.BaseEDA
                 }
             }
 
-            return weatherIndex;
-        }
-    }
-}
+             return weatherIndex;
+         }
+         
+     }
+ }
 
