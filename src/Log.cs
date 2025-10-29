@@ -17,7 +17,9 @@ public enum LogType
 
 public enum CSVLogType
 {
-    Mortality
+    Age1,
+    Mortality,
+    State
 }
 
 public static class Log
@@ -99,8 +101,12 @@ public static class Log
                 _csvPaths[ct] = path;
                 var sw = CreateWriter(path);
                 _csvWriters[ct] = sw;
+                if (ct == CSVLogType.Age1)
+                    sw.WriteLine("Timestep,Species,Age");
                 if (ct == CSVLogType.Mortality)
                     sw.WriteLine("Timestep,Species,Age");
+                if (ct == CSVLogType.State)
+                    sw.WriteLine("Timestep,Species,Age,InfectionState");
             }
 
             _queue = new BlockingCollection<LogItem>(new ConcurrentQueue<LogItem>());
@@ -196,6 +202,8 @@ public static class Log
         _queue.Add(new LogItem { Type = type, Line = line });
     }
     public static void MortalityCSV(int timestep, string species, ushort age) { WriteCSV(CSVLogType.Mortality, $"{timestep},{species},{age}"); }
+    public static void Age1CSV(int timestep, string species, ushort age) { WriteCSV(CSVLogType.Age1, $"{timestep},{species},{age}"); }
+    public static void StateCSV(int timestep, string species, ushort age, byte infectionState) { WriteCSV(CSVLogType.State, $"{timestep},{species},{age},{infectionState}"); }
     public static void Info(LogType type, string msg)  { Write(type, "INFO  " + msg); }
     public static void Warn(LogType type, string msg)  { Write(type, "WARN  " + msg); }
     public static void Error(LogType type, string msg) { Write(type, "ERROR " + msg); }

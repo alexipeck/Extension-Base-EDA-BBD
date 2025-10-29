@@ -415,6 +415,12 @@ namespace Landis.Extension.BaseEDA
                 bool containsHealthySpecies = false;
                 bool containsInfectedSpecies = false;
                 foreach (ISpeciesCohorts speciesCohorts in SiteVars.Cohorts[site]) {
+                    foreach (ICohort cohort in speciesCohorts) {
+                        if (cohort.Age == 1) {
+                            Log.Age1CSV(ModelCore.CurrentTime, cohort.Species.Name, cohort.Age);
+                        }
+                        Log.StateCSV(ModelCore.CurrentTime, cohort.Species.Name, cohort.Age, status);
+                    }
                     if (hostSpecies.Contains(speciesCohorts.Species) && (status == 1 || status == 2)) {
                         containsInfectedSpecies = true;
                     } else if (hostSpecies.Contains(speciesCohorts.Species)) {
