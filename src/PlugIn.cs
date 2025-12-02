@@ -337,6 +337,25 @@ namespace Landis.Extension.BaseEDA
             }
         }
 
+        public static void SerializeAsBincode(string outputPath, int timestep, byte[] data) {
+            (int x, int y) landscapeDimensions = (PlugIn.ModelCore.Landscape.Dimensions.Columns, PlugIn.ModelCore.Landscape.Dimensions.Rows);
+            int width = landscapeDimensions.x;
+            int height = landscapeDimensions.y;
+            ulong count = (ulong)((long)width * (long)height);
+            if (data == null) throw new ArgumentNullException(nameof(data));
+            if ((ulong)data.LongLength != count) throw new ArgumentException("Data length does not match width*height.");
+            string dir = Path.GetDirectoryName(outputPath);
+            if (!string.IsNullOrEmpty(dir)) Directory.CreateDirectory(dir);
+            using (FileStream fs = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None))
+            using (BinaryWriter writer = new BinaryWriter(fs)) {
+                writer.Write((uint)timestep);
+                writer.Write((uint)width);
+                writer.Write((uint)height);
+                writer.Write(count);
+                writer.Write(data);
+            }
+        }
+
         public static void SerializeAsBincode(string outputPath, int timestep, List<(int x, int y)> healthySitesList, List<(int x, int y)> infectedSitesList, List<(int x, int y)> ignoredSitesList, ulong[] healthyBiomassTracker, ulong[] infectedBiomassTracker, ulong[] ignoredBiomassTracker) {
             (int x, int y) landscapeDimensions = (PlugIn.ModelCore.Landscape.Dimensions.Columns, PlugIn.ModelCore.Landscape.Dimensions.Rows);
             int width = landscapeDimensions.x;
@@ -402,6 +421,7 @@ namespace Landis.Extension.BaseEDA
             ulong[] healthyBiomassTracker = new ulong[landscapeSize];
             ulong[] infectedBiomassTracker = new ulong[landscapeSize];
             ulong[] ignoredBiomassTracker = new ulong[landscapeSize];
+            byte[] regenerationOccurred = new byte[landscapeSize];
             List<(int x, int y)> healthySitesList = new List<(int x, int y)>();
             List<(int x, int y)> infectedSitesList = new List<(int x, int y)>();
             List<(int x, int y)> ignoredSitesList = new List<(int x, int y)>();
@@ -414,10 +434,13 @@ namespace Landis.Extension.BaseEDA
                 int ignoredBiomass = 0;
                 bool containsHealthySpecies = false;
                 bool containsInfectedSpecies = false;
+                Location siteLocation = site.Location;
+                int index = (siteLocation.Row - 1) * landscapeX + (siteLocation.Column - 1);
                 foreach (ISpeciesCohorts speciesCohorts in SiteVars.Cohorts[site]) {
                     foreach (ICohort cohort in speciesCohorts) {
-                        if (cohort.Age == 1) {
+                        if (cohort.Age == 2) {
                             Log.Age1CSV(ModelCore.CurrentTime, cohort.Species.Name, cohort.Age);
+                            regenerationOccurred[index] = 1;
                         }
                         Log.StateCSV(ModelCore.CurrentTime, cohort.Species.Name, cohort.Age, status);
                     }
@@ -428,8 +451,6 @@ namespace Landis.Extension.BaseEDA
                     }
                 }
                 int totalBiomass = healthyBiomass + infectedBiomass + ignoredBiomass;
-                Location siteLocation = site.Location;
-                int index = (siteLocation.Row - 1) * landscapeX + (siteLocation.Column - 1);
                 if (containsHealthySpecies && !containsInfectedSpecies) {
                     healthySitesList.Add((siteLocation.Column, siteLocation.Row));
                 } else if (containsInfectedSpecies) {
@@ -444,6 +465,8 @@ namespace Landis.Extension.BaseEDA
                 infectedBiomassTracker[index] = (ulong)infectedBiomass;
                 ignoredBiomassTracker[index] = (ulong)ignoredBiomass;
             }
+
+            SerializeAsBincode($"./data/regeneration_occurred/{modelCore.CurrentTime}.bin", modelCore.CurrentTime, regenerationOccurred);
 
             {
                 Task.Run(() => {

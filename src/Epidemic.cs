@@ -44,6 +44,11 @@ namespace Landis.Extension.BaseEDA
         private int[] sitesInEvent;
 
         private ActiveSite currentSite; // current site where cohorts are being affected
+        private byte[] infectionOccurred;
+        private byte[] mortalityOccurred;
+        private int trackerWidth;
+        private int trackerHeight;
+        private int trackerSize;
 
         // - Transmission - 
         private enum DispersalTemplate { PowerLaw, NegExp };   
@@ -174,6 +179,11 @@ namespace Landis.Extension.BaseEDA
             totalSitesInfected = 0;
             totalSitesDiseased = 0;
             totalSitesDamaged = 0;
+            trackerWidth = PlugIn.ModelCore.Landscape.Dimensions.Columns;
+            trackerHeight = PlugIn.ModelCore.Landscape.Dimensions.Rows;
+            trackerSize = trackerWidth * trackerHeight;
+            infectionOccurred = new byte[trackerSize];
+            mortalityOccurred = new byte[trackerSize];
         }
 
         //---------------------------------------------------------------------
@@ -184,6 +194,8 @@ namespace Landis.Extension.BaseEDA
             PlugIn.ModelCore.UI.WriteLine("   Computing weather index and force of infection for each cell...");
             int siteCohortsKilled = 0; //why initialize this here since you reset to 0 inside the foreach loop?
             int[] cohortsKilled = new int[3];
+            Array.Clear(infectionOccurred, 0, trackerSize);
+            Array.Clear(mortalityOccurred, 0, trackerSize);
 
             // Precalculate the grids and kernel once per time step to improve performance
             PrepareGrids(agentIndex);
@@ -243,6 +255,7 @@ namespace Landis.Extension.BaseEDA
                     //update state of current site from S to I
                     SiteVars.InfStatus[site][agentIndex] += 1;
                     totalSitesInfected++;
+                    infectionOccurred[GetTrackerIndex(site)] = 1;
                     
                     string coordinates = $"({site.Location.Row}, {site.Location.Column})";
                 }
@@ -278,6 +291,7 @@ namespace Landis.Extension.BaseEDA
                         //if there is at least one cohort killed by current epidemic event
                         if (siteCohortsKilled > 0)
                         {
+                            mortalityOccurred[GetTrackerIndex(site)] = 1;
                             PlugIn.ModelCore.UI.WriteLine("   Computing cohort mortality for each cell...");
                             totalCohortsKilled += siteCohortsKilled;  //cumulate number of cohorts killed
                             totalSitesDamaged++; //cumulate number of sites damaged
@@ -314,6 +328,7 @@ namespace Landis.Extension.BaseEDA
                     //if there is at least one cohort killed by current epidemic event
                     if (siteCohortsKilled > 0)
                     {
+                        mortalityOccurred[GetTrackerIndex(site)] = 1;
                         PlugIn.ModelCore.UI.WriteLine("   Computing cohort mortality for each cell...");
                         totalCohortsKilled += siteCohortsKilled;  //cumulate number of cohorts killed
                         totalSitesDamaged++; //cumulate number of sites damaged
@@ -325,7 +340,19 @@ namespace Landis.Extension.BaseEDA
                     }
                 }
             }
+            WriteEventTrackingOutputs();
         }  
+
+        private int GetTrackerIndex(ActiveSite site)
+        {
+            return (site.Location.Row - 1) * trackerWidth + (site.Location.Column - 1);
+        }
+
+        private void WriteEventTrackingOutputs()
+        {
+            PlugIn.SerializeAsBincode($"./data/infection_occurred/{PlugIn.ModelCore.CurrentTime}.bin", PlugIn.ModelCore.CurrentTime, infectionOccurred);
+            PlugIn.SerializeAsBincode($"./data/mortality_occurred/{PlugIn.ModelCore.CurrentTime}.bin", PlugIn.ModelCore.CurrentTime, mortalityOccurred);
+        }
 
         //---------------------------------------------------------------------
         //A small helper function for going through list of cohorts at a site

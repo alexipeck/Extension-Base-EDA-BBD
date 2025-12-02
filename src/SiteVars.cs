@@ -5,6 +5,7 @@
 using Landis.Core;
 using Landis.SpatialModeling;
 using Landis.Library.AgeOnlyCohorts;
+using System;
 using System.Collections.Generic;
 
 namespace Landis.Extension.BaseEDA
@@ -373,6 +374,7 @@ namespace Landis.Extension.BaseEDA
             }
 
         }
+        
         //---------------------------------------------------------------------
         public static ISiteVar<string> AgentName
         {
